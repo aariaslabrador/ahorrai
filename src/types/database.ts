@@ -34,15 +34,18 @@ export type Product = {
   created_at: string;
 };
 
+export type PriceSource = "community" | "scraper";
+
 export type PriceReport = {
   id: string;
   product_id: string;
   supermarket_id: string;
-  user_id: string;
+  user_id: string | null;
   price: number;
-  image_url: string;
+  image_url: string | null;
   ocr_raw_text: string | null;
   ocr_confidence: number | null;
+  source: PriceSource;
   created_at: string;
 };
 
@@ -50,9 +53,10 @@ export type LatestPrice = {
   id: string;
   product_id: string;
   supermarket_id: string;
-  user_id: string;
+  user_id: string | null;
   price: number;
-  image_url: string;
+  image_url: string | null;
+  source: PriceSource;
   created_at: string;
   product_name: string;
   product_brand: string | null;
@@ -114,7 +118,11 @@ export type Database = {
       };
       price_reports: {
         Row: PriceReport;
-        Insert: Omit<PriceReport, "id" | "created_at"> & { id?: string; created_at?: string };
+        Insert: Omit<PriceReport, "id" | "created_at" | "source"> & {
+          id?: string;
+          created_at?: string;
+          source?: PriceSource;
+        };
         Update: Partial<PriceReport>;
         Relationships: [];
       };

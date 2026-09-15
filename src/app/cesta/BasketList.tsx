@@ -33,7 +33,7 @@ export default function BasketList({ items }: { items: BasketListItem[] }) {
   if (items.length === 0) {
     return (
       <p className="rounded-xl border border-dashed border-neutral-300 px-4 py-6 text-center text-sm text-neutral-400">
-        Tu cesta está vacía. Añade productos más abajo.
+        Tu cartera está vacía. Añade productos más abajo.
       </p>
     );
   }

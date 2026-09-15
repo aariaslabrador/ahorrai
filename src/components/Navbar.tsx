@@ -12,15 +12,15 @@ export default async function Navbar() {
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold text-neutral-900">
-          <span className="text-xl">🛒</span> ValoraMercados
+          <span className="text-xl">💹</span> ValoraMercados
         </Link>
 
         <div className="hidden items-center gap-6 text-sm font-medium text-neutral-600 sm:flex">
           <Link href="/supermercados" className="hover:text-emerald-700">
-            Supermercados
+            Mercados
           </Link>
           <Link href="/ofertas" className="hover:text-emerald-700">
-            Ofertas
+            Cotizaciones
           </Link>
           {user && (
             <>
@@ -28,7 +28,7 @@ export default async function Navbar() {
                 Reportar precio
               </Link>
               <Link href="/cesta" className="hover:text-emerald-700">
-                Mi cesta
+                Mi cartera
               </Link>
             </>
           )}

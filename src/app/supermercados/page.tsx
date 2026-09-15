@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import MapView from "@/components/MapView";
 import RatingStars from "@/components/RatingStars";
+import ChangeBadge from "@/components/ChangeBadge";
+import { averageChangeBySupermarket, getWeeklyPriceMoves } from "@/lib/priceHistory";
 
 export default async function SupermercadosPage({
   searchParams,
@@ -19,6 +21,9 @@ export default async function SupermercadosPage({
 
   const { data: ratingRows } = await supabase.from("supermarket_ratings").select("*");
   const ratingsById = new Map((ratingRows ?? []).map((r) => [r.supermarket_id, r]));
+
+  const moves = await getWeeklyPriceMoves(supabase);
+  const indexBySupermarket = averageChangeBySupermarket(moves);
 
   const { data: cityRows } = await supabase
     .from("supermarkets")
@@ -90,11 +95,14 @@ export default async function SupermercadosPage({
                 <p className="mt-1 text-sm text-neutral-500">
                   {s.address}, {s.city}
                 </p>
-                <div className="mt-2 flex items-center gap-2">
-                  <RatingStars score={rating?.avg_score ?? 0} />
-                  <span className="text-xs text-neutral-400">
-                    {rating ? `${rating.avg_score} (${rating.ratings_count})` : "Sin valoraciones"}
-                  </span>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <RatingStars score={rating?.avg_score ?? 0} />
+                    <span className="text-xs text-neutral-400">
+                      {rating ? `${rating.avg_score} (${rating.ratings_count})` : "Sin valoraciones"}
+                    </span>
+                  </div>
+                  {indexBySupermarket.has(s.id) && <ChangeBadge pct={indexBySupermarket.get(s.id)} />}
                 </div>
               </Link>
             </li>
