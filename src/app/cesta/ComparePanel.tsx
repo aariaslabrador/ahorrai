@@ -86,10 +86,10 @@ export default function ComparePanel({
 
   return (
     <div className="rounded-xl border border-neutral-200 bg-white p-4">
-      <p className="text-sm font-semibold text-neutral-800">Compara tu cesta en supermercados cercanos</p>
+      <p className="text-sm font-semibold text-neutral-800">Cotiza tu cartera en supermercados cercanos</p>
       <p className="mt-1 text-xs text-neutral-500">
         Usamos tu ubicación para encontrar los supermercados más cercanos y sumar el precio de tu
-        cesta en cada uno con los últimos precios reportados por la comunidad.
+        cartera en cada uno con los últimos precios reportados por la comunidad.
       </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -99,7 +99,7 @@ export default function ComparePanel({
           disabled={status === "locating" || status === "comparing" || totalItems === 0}
           className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
         >
-          {status === "locating" ? "Localizando..." : "📍 Comparar cerca de mí"}
+          {status === "locating" ? "Localizando..." : "📍 Cotizar cerca de mí"}
         </button>
 
         <span className="text-xs text-neutral-400">o</span>
@@ -122,16 +122,16 @@ export default function ComparePanel({
           disabled={!selectedCity || status === "comparing" || totalItems === 0}
           className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 disabled:opacity-60"
         >
-          Comparar en esta ciudad
+          Cotizar en esta ciudad
         </button>
       </div>
 
       {totalItems === 0 && (
-        <p className="mt-3 text-sm text-neutral-400">Añade productos a tu cesta para poder compararla.</p>
+        <p className="mt-3 text-sm text-neutral-400">Añade productos a tu cartera para poder cotizarla.</p>
       )}
 
       {status === "error" && <p className="mt-3 text-sm text-red-600">{errorMsg}</p>}
-      {status === "comparing" && <p className="mt-3 text-sm text-neutral-500">Comparando precios...</p>}
+      {status === "comparing" && <p className="mt-3 text-sm text-neutral-500">Cotizando precios...</p>}
 
       {results && results.length === 0 && status === "idle" && (
         <p className="mt-3 text-sm text-neutral-400">
@@ -166,7 +166,7 @@ export default function ComparePanel({
                   <div className="text-right">
                     <p className="text-lg font-bold text-emerald-700">{r.total.toFixed(2)} €</p>
                     {isCheapest && (
-                      <span className="text-xs font-medium text-emerald-600">🏆 Más barata</span>
+                      <span className="text-xs font-medium text-emerald-600">🏆 Mejor cotización</span>
                     )}
                   </div>
                 </div>

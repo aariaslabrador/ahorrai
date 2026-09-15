@@ -2,6 +2,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import AddToBasketButton from "@/components/AddToBasketButton";
 import PriceSourceBadge from "@/components/PriceSourceBadge";
+import ChangeBadge from "@/components/ChangeBadge";
+import { getWeeklyPriceMoves, movesByPairKey } from "@/lib/priceHistory";
+import { productSymbol } from "@/lib/ticker";
 
 export default async function OfertasPage({
   searchParams,
@@ -20,16 +23,19 @@ export default async function OfertasPage({
   if (ciudad) query = query.ilike("supermarket_city", ciudad);
   if (q) query = query.ilike("product_name", `%${q}%`);
 
-  const { data: prices } = await query;
-
-  const { data: cityRows } = await supabase.from("supermarkets").select("city");
+  const [{ data: prices }, { data: cityRows }, moves] = await Promise.all([
+    query,
+    supabase.from("supermarkets").select("city"),
+    getWeeklyPriceMoves(supabase),
+  ]);
   const cities = Array.from(new Set((cityRows ?? []).map((c) => c.city))).sort();
+  const changeByPair = movesByPairKey(moves);
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
-      <h1 className="text-2xl font-bold text-neutral-900">Mejores ofertas</h1>
+      <h1 className="text-2xl font-bold text-neutral-900">Cotizaciones</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Precios más bajos reportados recientemente por la comunidad.
+        Último precio reportado de cada producto y su variación en los últimos 7 días.
       </p>
 
       <form className="mt-4 flex flex-wrap gap-2">
@@ -65,6 +71,9 @@ export default async function OfertasPage({
           <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
             <div>
               <div className="flex flex-wrap items-center gap-2">
+                <span className="font-mono text-[11px] font-bold text-emerald-700">
+                  {productSymbol(p.product_name)}
+                </span>
                 <p className="font-medium text-neutral-800">{p.product_name}</p>
                 <PriceSourceBadge source={p.source} />
               </div>
@@ -77,6 +86,7 @@ export default async function OfertasPage({
               </Link>
             </div>
             <div className="flex items-center gap-3">
+              <ChangeBadge pct={changeByPair.get(`${p.product_id}::${p.supermarket_id}`)} />
               <span className="text-lg font-bold text-emerald-700">{p.price.toFixed(2)} €</span>
               {p.image_url && (
                 <a

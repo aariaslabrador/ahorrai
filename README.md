@@ -14,13 +14,19 @@ de etiquetas (con lectura automática por OCR).
 - **Precios por foto con OCR**: al reportar un precio, el usuario sube una foto
   de la etiqueta; el navegador ejecuta OCR (Tesseract.js) para detectar el
   precio automáticamente y el usuario lo confirma o corrige antes de enviarlo.
-- **Ofertas**: listado de los precios más bajos reportados recientemente,
-  filtrable por ciudad y buscable por producto.
-- **Cesta de la compra y comparador**: el usuario arma una cesta con los
-  productos que suele comprar y la aplicación calcula su coste total en los
+- **Cotizaciones**: cada producto reportado tiene un símbolo tipo ticker
+  (ej. `ACE-1L`) y muestra su variación en los últimos 7 días, calculada de
+  verdad a partir del historial de `price_reports` (nunca inventada). El
+  listado es buscable y filtrable por ciudad.
+- **Índice y mayores movimientos**: en el Inicio se muestra la variación
+  media de precios de la semana y un ranking de los productos que más han
+  subido y bajado, y cada supermercado cotiza su propio índice semanal junto
+  a sus valoraciones.
+- **Mi cartera y comparador**: el usuario arma una cartera con los productos
+  que suele comprar y la aplicación calcula su coste total en los
   supermercados más cercanos (usando la geolocalización del navegador, con
   alternativa por ciudad) a partir de los últimos precios reportados,
-  señalando cuál sale más barata.
+  señalando cuál da la mejor cotización.
 - **Precios importados (opcional)**: un script aparte (`scripts/import-mercadona.mjs`)
   puede poblar precios "oficiales" desde la web de un supermercado como base,
   que luego los usuarios sobrescriben con sus propios reportes — ver
@@ -75,18 +81,22 @@ src/
     login/, registro/            Autenticación
     supermercados/                Listado + mapa, alta, detalle y valoraciones
     precios/nuevo/                Reporte de precio con foto + OCR
-    ofertas/                      Mejores precios recientes
-    cesta/                        Cesta de la compra + comparador de supermercados cercanos
+    ofertas/                      Cotizaciones (símbolo, precio y variación semanal)
+    cesta/                        Mi cartera + comparador de supermercados cercanos
     auth/actions.ts               Server actions de login/registro/logout
   components/
     Map.tsx / MapView.tsx         Mapa Leaflet (carga solo en cliente)
     RatingStars.tsx
-    AddToBasketButton.tsx         Botón rápido "+ Cesta" reutilizable
+    ChangeBadge.tsx                Badge ▲/▼ de variación de precio
+    PriceSourceBadge.tsx           Badge 'oficial' vs 'comunidad'
+    AddToBasketButton.tsx         Botón rápido "+ Cartera" reutilizable
     Navbar.tsx
   lib/
     supabase/                     Clientes de Supabase (browser/server/middleware)
     ocr.ts                        Lógica de OCR con Tesseract.js
     geo.ts                        Distancia entre coordenadas (fórmula de Haversine)
+    priceHistory.ts               Variación semanal real por producto/supermercado
+    ticker.ts                     Símbolo tipo ticker a partir del nombre del producto
   types/database.ts               Tipos TypeScript del esquema
   scripts/
     import-mercadona.mjs          Importador opcional de precios (ver más abajo)
@@ -106,10 +116,14 @@ supabase/migrations/
   de un administrador central en el MVP).
 - El sistema de valoración es un modelo simple de 1 a 5 estrellas por ahora;
   se puede sofisticar más adelante (subcriterios, verificación de compra, etc.).
-- La cesta es única por usuario (no hay listas múltiples en el MVP). El
+- La cartera es única por usuario (no hay listas múltiples en el MVP). El
   comparador solo puede sumar precios de productos que ya tengan algún
   reporte en ese supermercado; si faltan, se muestra cuántos y cuáles para
   que el usuario sepa que el total es parcial en lugar de ocultarlo.
+- Las variaciones de precio (▲/▼) se calculan siempre a partir de reportes
+  reales en `price_reports` de los últimos 7 días; si una pareja
+  producto+supermercado no tiene al menos dos reportes en esa ventana,
+  simplemente no muestra variación (nunca se rellena con datos inventados).
 
 ## Importar precios oficiales (opcional, y bajo tu responsabilidad)
 

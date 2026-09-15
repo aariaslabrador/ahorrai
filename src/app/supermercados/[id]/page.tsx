@@ -5,6 +5,9 @@ import MapView from "@/components/MapView";
 import RatingStars from "@/components/RatingStars";
 import AddToBasketButton from "@/components/AddToBasketButton";
 import PriceSourceBadge from "@/components/PriceSourceBadge";
+import ChangeBadge from "@/components/ChangeBadge";
+import { getWeeklyPriceMoves, movesByPairKey } from "@/lib/priceHistory";
+import { productSymbol } from "@/lib/ticker";
 import RatingForm from "./RatingForm";
 
 export default async function SupermercadoDetailPage({
@@ -25,7 +28,7 @@ export default async function SupermercadoDetailPage({
     notFound();
   }
 
-  const [{ data: ratingSummary }, { data: ratings }, { data: prices }] = await Promise.all([
+  const [{ data: ratingSummary }, { data: ratings }, { data: prices }, moves] = await Promise.all([
     supabase.from("supermarket_ratings").select("*").eq("supermarket_id", id).maybeSingle(),
     supabase
       .from("ratings")
@@ -39,7 +42,13 @@ export default async function SupermercadoDetailPage({
       .eq("supermarket_id", id)
       .order("created_at", { ascending: false })
       .limit(20),
+    getWeeklyPriceMoves(supabase, { supermarketId: id }),
   ]);
+
+  const changeByPair = movesByPairKey(moves);
+  const storeIndex = moves.length
+    ? moves.reduce((sum, m) => sum + m.pct_change, 0) / moves.length
+    : null;
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
@@ -56,13 +65,21 @@ export default async function SupermercadoDetailPage({
           <p className="mt-1 text-sm text-neutral-500">
             {supermarket.address}, {supermarket.city}
           </p>
-          <div className="mt-2 flex items-center gap-2">
-            <RatingStars score={ratingSummary?.avg_score ?? 0} size="md" />
-            <span className="text-sm text-neutral-500">
-              {ratingSummary
-                ? `${ratingSummary.avg_score} de 5 (${ratingSummary.ratings_count} valoraciones)`
-                : "Sin valoraciones todavía"}
-            </span>
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <RatingStars score={ratingSummary?.avg_score ?? 0} size="md" />
+              <span className="text-sm text-neutral-500">
+                {ratingSummary
+                  ? `${ratingSummary.avg_score} de 5 (${ratingSummary.ratings_count} valoraciones)`
+                  : "Sin valoraciones todavía"}
+              </span>
+            </div>
+            {storeIndex !== null && (
+              <div className="flex items-center gap-1 text-xs text-neutral-500">
+                <span>Índice semanal:</span>
+                <ChangeBadge pct={storeIndex} />
+              </div>
+            )}
           </div>
         </div>
         <Link
@@ -90,12 +107,16 @@ export default async function SupermercadoDetailPage({
               <li key={p.id} className="flex items-center justify-between gap-4 px-4 py-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[11px] font-bold text-emerald-700">
+                      {productSymbol(p.product_name)}
+                    </span>
                     <p className="font-medium text-neutral-800">{p.product_name}</p>
                     <PriceSourceBadge source={p.source} />
                   </div>
                   {p.product_brand && <p className="text-xs text-neutral-400">{p.product_brand}</p>}
                 </div>
                 <div className="flex items-center gap-3">
+                  <ChangeBadge pct={changeByPair.get(`${p.product_id}::${p.supermarket_id}`)} />
                   <span className="font-semibold text-emerald-700">{p.price.toFixed(2)} €</span>
                   {p.image_url && (
                     <a
