@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import MapView from "@/components/MapView";
 import RatingStars from "@/components/RatingStars";
 import AddToBasketButton from "@/components/AddToBasketButton";
+import PriceSourceBadge from "@/components/PriceSourceBadge";
 import RatingForm from "./RatingForm";
 
 export default async function SupermercadoDetailPage({
@@ -88,19 +89,24 @@ export default async function SupermercadoDetailPage({
             {prices.map((p) => (
               <li key={p.id} className="flex items-center justify-between gap-4 px-4 py-3">
                 <div>
-                  <p className="font-medium text-neutral-800">{p.product_name}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-medium text-neutral-800">{p.product_name}</p>
+                    <PriceSourceBadge source={p.source} />
+                  </div>
                   {p.product_brand && <p className="text-xs text-neutral-400">{p.product_brand}</p>}
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-semibold text-emerald-700">{p.price.toFixed(2)} €</span>
-                  <a
-                    href={p.image_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-neutral-400 underline"
-                  >
-                    ver foto
-                  </a>
+                  {p.image_url && (
+                    <a
+                      href={p.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-neutral-400 underline"
+                    >
+                      ver foto
+                    </a>
+                  )}
                   <AddToBasketButton productId={p.product_id} />
                 </div>
               </li>
