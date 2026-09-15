@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import MapView from "@/components/MapView";
 import RatingStars from "@/components/RatingStars";
+import AddToBasketButton from "@/components/AddToBasketButton";
 import RatingForm from "./RatingForm";
 
 export default async function SupermercadoDetailPage({
@@ -100,6 +101,7 @@ export default async function SupermercadoDetailPage({
                   >
                     ver foto
                   </a>
+                  <AddToBasketButton productId={p.product_id} />
                 </div>
               </li>
             ))}

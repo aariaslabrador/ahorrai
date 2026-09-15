@@ -23,9 +23,14 @@ export default async function Navbar() {
             Ofertas
           </Link>
           {user && (
-            <Link href="/precios/nuevo" className="hover:text-emerald-700">
-              Reportar precio
-            </Link>
+            <>
+              <Link href="/precios/nuevo" className="hover:text-emerald-700">
+                Reportar precio
+              </Link>
+              <Link href="/cesta" className="hover:text-emerald-700">
+                Mi cesta
+              </Link>
+            </>
           )}
         </div>
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import AddToBasketButton from "@/components/AddToBasketButton";
 
 export default async function OfertasPage({
   searchParams,
@@ -81,6 +82,7 @@ export default async function OfertasPage({
               >
                 ver foto
               </a>
+              <AddToBasketButton productId={p.product_id} />
             </div>
           </li>
         ))}

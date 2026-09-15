@@ -16,6 +16,11 @@ de etiquetas (con lectura automática por OCR).
   precio automáticamente y el usuario lo confirma o corrige antes de enviarlo.
 - **Ofertas**: listado de los precios más bajos reportados recientemente,
   filtrable por ciudad y buscable por producto.
+- **Cesta de la compra y comparador**: el usuario arma una cesta con los
+  productos que suele comprar y la aplicación calcula su coste total en los
+  supermercados más cercanos (usando la geolocalización del navegador, con
+  alternativa por ciudad) a partir de los últimos precios reportados,
+  señalando cuál sale más barata.
 
 ## Stack
 
@@ -29,11 +34,13 @@ de etiquetas (con lectura automática por OCR).
 ### 1. Crear el proyecto de Supabase
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
-2. Ve a **SQL Editor** y ejecuta el contenido de
-   [`supabase/migrations/0001_init.sql`](./supabase/migrations/0001_init.sql).
+2. Ve a **SQL Editor** y ejecuta, en orden, el contenido de
+   [`supabase/migrations/0001_init.sql`](./supabase/migrations/0001_init.sql)
+   y [`supabase/migrations/0002_basket.sql`](./supabase/migrations/0002_basket.sql).
    Esto crea las tablas (`profiles`, `supermarkets`, `ratings`, `products`,
-   `price_reports`), las vistas (`latest_prices`, `supermarket_ratings`), las
-   políticas de RLS y el bucket de Storage `price-photos` (público en lectura).
+   `price_reports`, `baskets`, `basket_items`), las vistas (`latest_prices`,
+   `supermarket_ratings`), las políticas de RLS y el bucket de Storage
+   `price-photos` (público en lectura).
 3. En **Project Settings → API** copia la `Project URL` y la `anon public key`.
 
 ### 2. Variables de entorno
@@ -64,16 +71,21 @@ src/
     supermercados/                Listado + mapa, alta, detalle y valoraciones
     precios/nuevo/                Reporte de precio con foto + OCR
     ofertas/                      Mejores precios recientes
+    cesta/                        Cesta de la compra + comparador de supermercados cercanos
     auth/actions.ts               Server actions de login/registro/logout
   components/
     Map.tsx / MapView.tsx         Mapa Leaflet (carga solo en cliente)
     RatingStars.tsx
+    AddToBasketButton.tsx         Botón rápido "+ Cesta" reutilizable
     Navbar.tsx
   lib/
     supabase/                     Clientes de Supabase (browser/server/middleware)
     ocr.ts                        Lógica de OCR con Tesseract.js
+    geo.ts                        Distancia entre coordenadas (fórmula de Haversine)
   types/database.ts               Tipos TypeScript del esquema
-supabase/migrations/0001_init.sql Esquema SQL completo
+supabase/migrations/
+  0001_init.sql                   Esquema base (supermercados, valoraciones, precios)
+  0002_basket.sql                 Cesta de la compra
 ```
 
 ## Notas de diseño
@@ -86,6 +98,10 @@ supabase/migrations/0001_init.sql Esquema SQL completo
   de un administrador central en el MVP).
 - El sistema de valoración es un modelo simple de 1 a 5 estrellas por ahora;
   se puede sofisticar más adelante (subcriterios, verificación de compra, etc.).
+- La cesta es única por usuario (no hay listas múltiples en el MVP). El
+  comparador solo puede sumar precios de productos que ya tengan algún
+  reporte en ese supermercado; si faltan, se muestra cuántos y cuáles para
+  que el usuario sepa que el total es parcial en lugar de ocultarlo.
 
 ## Próximos pasos sugeridos
 
