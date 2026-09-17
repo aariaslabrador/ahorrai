@@ -212,9 +212,10 @@ ofrece esa API.
 1. Un proyecto en [Google Cloud Console](https://console.cloud.google.com)
    con facturación activada (dan crédito gratuito mensual; consulta el
    pricing actual de Google Maps Platform).
-2. Habilitar la **Places API** en ese proyecto.
-3. Crear una **API key** en *Credenciales*, y restringirla a "Places API"
-   para que no se pueda usar para otra cosa si se filtra.
+2. Habilitar **"Places API (New)"** en ese proyecto — ojo, no la "Places
+   API" clásica/legacy: esa ya no se puede activar en proyectos nuevos.
+3. Crear una **API key** en *Credenciales*, y restringirla a "Places API
+   (New)" para que no se pueda usar para otra cosa si se filtra.
 4. Poner esa clave en `GOOGLE_MAPS_API_KEY` en tu `.env.local` (servidor,
    **sin** prefijo `NEXT_PUBLIC_`: nunca llega al navegador).
 

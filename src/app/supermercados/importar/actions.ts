@@ -13,10 +13,15 @@ export type PlaceCandidate = {
 
 export type SearchState = { error: string | null; results: PlaceCandidate[] };
 
+// Google retiró la Places API "clásica" para proyectos nuevos: esto usa
+// Places API (New), que habla JSON por POST en vez de query params por GET.
+const TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
+const FIELD_MASK = "places.displayName,places.formattedAddress,places.location";
+
 type GooglePlaceResult = {
-  name?: string;
-  formatted_address?: string;
-  geometry?: { location?: { lat?: number; lng?: number } };
+  displayName?: { text?: string };
+  formattedAddress?: string;
+  location?: { latitude?: number; longitude?: number };
 };
 
 export async function searchGooglePlaces(city: string, query: string): Promise<SearchState> {
@@ -37,27 +42,33 @@ export async function searchGooglePlaces(city: string, query: string): Promise<S
   }
 
   const searchText = `${query.trim() || "supermercado"} en ${city.trim()}`;
-  const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(searchText)}&key=${apiKey}`;
 
-  let body: { status: string; error_message?: string; results?: GooglePlaceResult[] };
+  let body: { error?: { message?: string }; places?: GooglePlaceResult[] };
   try {
-    const res = await fetch(url);
+    const res = await fetch(TEXT_SEARCH_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-FieldMask": FIELD_MASK,
+      },
+      body: JSON.stringify({ textQuery: searchText, languageCode: "es" }),
+    });
     body = await res.json();
+    if (!res.ok) {
+      return { error: `Google Places respondió: ${body.error?.message ?? `HTTP ${res.status}`}`, results: [] };
+    }
   } catch {
     return { error: "No se pudo contactar con Google Maps. Inténtalo de nuevo.", results: [] };
   }
 
-  if (body.status !== "OK" && body.status !== "ZERO_RESULTS") {
-    return { error: `Google Places respondió: ${body.status}${body.error_message ? ` (${body.error_message})` : ""}`, results: [] };
-  }
-
-  const raw = (body.results ?? [])
+  const raw = (body.places ?? [])
     .slice(0, 20)
     .map((p) => ({
-      name: p.name?.trim() ?? "",
-      address: p.formatted_address?.trim() ?? "",
-      lat: p.geometry?.location?.lat,
-      lng: p.geometry?.location?.lng,
+      name: p.displayName?.text?.trim() ?? "",
+      address: p.formattedAddress?.trim() ?? "",
+      lat: p.location?.latitude,
+      lng: p.location?.longitude,
     }))
     .filter(
       (p): p is { name: string; address: string; lat: number; lng: number } =>
