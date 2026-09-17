@@ -13,6 +13,13 @@ export async function signIn(_prevState: AuthState, formData: FormData): Promise
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
+    if (error.code === "email_not_confirmed" || /confirm/i.test(error.message)) {
+      return {
+        error:
+          "Tu email todavía no está confirmado. Revisa tu bandeja de entrada (y spam) para confirmarlo, " +
+          "o desactiva la confirmación en Supabase: Authentication → Providers → Email → 'Confirm email'.",
+      };
+    }
     return { error: "Email o contraseña incorrectos." };
   }
 
