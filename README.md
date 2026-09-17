@@ -67,7 +67,11 @@ de etiquetas (con lectura automática por OCR).
    "mayores movimientos de la semana" del Inicio muestran datos reales desde
    ya, en vez de aparecer vacíos hasta que usuarios de verdad reporten
    precios repetidos. No hace falta para que la app funcione — sáltatelo si
-   prefieres arrancar con la base de datos limpia.
+   prefieres arrancar con la base de datos limpia. Cuando quieras quitarlos
+   (por ejemplo, al pasar a datos reales), ejecuta
+   [`supabase/remove_demo.sql`](./supabase/remove_demo.sql): borra
+   exactamente lo que insertó `seed_demo.sql`, sin tocar nada añadido de
+   verdad desde la app.
 4. En **Project Settings → API** copia la `Project URL` y la `anon public key`.
 
 ### 2. Variables de entorno
@@ -123,6 +127,7 @@ supabase/
     0002_basket.sql               Cesta de la compra
     0003_price_source.sql         Distingue precios 'community' vs 'scraper'
   seed_demo.sql                   Datos de ejemplo opcionales para ver la app con datos
+  remove_demo.sql                 Quita exactamente los datos de seed_demo.sql
 ```
 
 ## Notas de diseño
