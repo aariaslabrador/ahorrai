@@ -77,13 +77,13 @@ export default function ReportPriceForm({
   return (
     <form action={formAction} className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Supermercado
           <select
             name="supermarket_id"
             required
             defaultValue={defaultSupermarketId ?? ""}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           >
             <option value="" disabled>
               Selecciona un supermercado
@@ -96,26 +96,26 @@ export default function ReportPriceForm({
           </select>
         </label>
 
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Producto
           <input
             name="product_name"
             required
             placeholder="Ej. Leche entera 1L"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Marca (opcional)
           <input
             name="brand"
             placeholder="Ej. Hacendado"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Foto del precio / etiqueta
           <input
             ref={fileInputRef}
@@ -124,26 +124,26 @@ export default function ReportPriceForm({
             capture="environment"
             required
             onChange={handleFileChange}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-accent-50 file:px-3 file:py-1.5 file:text-accent-700"
+            className="rounded-lg border border-line px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-accent-50 file:px-3 file:py-1.5 file:text-accent-700"
           />
         </label>
 
         {statusMessage && (
-          <p className={`text-sm ${status === "error" ? "text-red-600" : "text-neutral-500"}`}>
+          <p className={`text-sm ${status === "error" ? "text-red-600" : "text-muted"}`}>
             {status === "processing" && "⏳ "}
             {statusMessage}
           </p>
         )}
 
         {ocrResult && ocrResult.priceCandidates.length > 1 && (
-          <div className="flex flex-wrap gap-2 text-xs text-neutral-500">
+          <div className="flex flex-wrap gap-2 text-xs text-muted">
             Otros valores detectados:
             {ocrResult.priceCandidates.map((c) => (
               <button
                 type="button"
                 key={c}
                 onClick={() => setPrice(c)}
-                className="rounded-full border border-neutral-300 px-2 py-0.5 hover:border-accent-400 hover:text-accent-700"
+                className="rounded-full border border-line px-2 py-0.5 hover:border-accent-400 hover:text-accent-700"
               >
                 {c}
               </button>
@@ -151,7 +151,7 @@ export default function ReportPriceForm({
           </div>
         )}
 
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Precio (€)
           <input
             name="price"
@@ -161,7 +161,7 @@ export default function ReportPriceForm({
             required
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -181,12 +181,12 @@ export default function ReportPriceForm({
       </div>
 
       <div className="flex flex-col gap-3">
-        <p className="text-sm font-medium text-neutral-700">Vista previa</p>
+        <p className="text-sm font-medium text-muted">Vista previa</p>
         {previewUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={previewUrl} alt="Foto del precio" className="max-h-96 w-full rounded-xl border border-neutral-200 object-contain" />
+          <img src={previewUrl} alt="Foto del precio" className="max-h-96 w-full rounded-xl border border-line object-contain" />
         ) : (
-          <div className="flex h-64 w-full items-center justify-center rounded-xl border border-dashed border-neutral-300 text-sm text-neutral-400">
+          <div className="flex h-64 w-full items-center justify-center rounded-xl border border-dashed border-line text-sm text-muted">
             La foto aparecerá aquí
           </div>
         )}

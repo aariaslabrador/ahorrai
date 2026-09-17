@@ -34,8 +34,8 @@ export default async function OfertasPage({
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
-      <h1 className="font-display text-2xl font-bold text-neutral-900">Cotizaciones</h1>
-      <p className="mt-1 text-sm text-neutral-500">
+      <h1 className="font-display text-2xl font-bold text-foreground">Cotizaciones</h1>
+      <p className="mt-1 text-sm text-muted">
         Último precio reportado de cada producto y su variación en los últimos 7 días.
       </p>
 
@@ -45,12 +45,12 @@ export default async function OfertasPage({
           name="q"
           defaultValue={q}
           placeholder="Buscar producto..."
-          className="flex-1 min-w-[180px] rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+          className="flex-1 min-w-[180px] rounded-lg border border-line px-3 py-2 text-sm"
         />
         <select
           name="ciudad"
           defaultValue={ciudad ?? ""}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-line px-3 py-2 text-sm"
         >
           <option value="">Todas las ciudades</option>
           {cities.map((c) => (
@@ -61,56 +61,76 @@ export default async function OfertasPage({
         </select>
         <button
           type="submit"
-          className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100"
+          className="rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2"
         >
           Buscar
         </button>
       </form>
 
-      <ul className="mt-6 divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
-        {(prices ?? []).map((p) => {
-          const move = moveByPair.get(`${p.product_id}::${p.supermarket_id}`);
-          return (
-            <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[11px] font-bold text-accent-700">
-                    {productSymbol(p.product_name)}
-                  </span>
-                  <p className="font-medium text-neutral-800">{p.product_name}</p>
-                  <PriceSourceBadge source={p.source} />
+      <div className="mt-6 overflow-hidden rounded-xl border border-line bg-surface">
+        <div className="hidden grid-cols-[1.7fr_1fr_auto_auto_auto] gap-3 border-b border-line px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-muted sm:grid">
+          <span>Producto</span>
+          <span>Mercado</span>
+          <span className="text-right">Último</span>
+          <span className="text-right">Var.</span>
+          <span />
+        </div>
+        <ul className="divide-y divide-line">
+          {(prices ?? []).map((p) => {
+            const move = moveByPair.get(`${p.product_id}::${p.supermarket_id}`);
+            return (
+              <li
+                key={p.id}
+                className="grid grid-cols-2 items-center gap-x-3 gap-y-2 px-4 py-3 sm:grid-cols-[1.7fr_1fr_auto_auto_auto]"
+              >
+                <div className="col-span-2 sm:col-span-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[11px] font-bold text-accent-600">
+                      {productSymbol(p.product_name)}
+                    </span>
+                    <p className="font-medium text-foreground">{p.product_name}</p>
+                    <PriceSourceBadge source={p.source} />
+                  </div>
+                  {p.product_brand && <p className="text-xs text-muted">{p.product_brand}</p>}
                 </div>
-                {p.product_brand && <p className="text-xs text-neutral-400">{p.product_brand}</p>}
+
                 <Link
                   href={`/supermercados/${p.supermarket_id}`}
-                  className="text-xs text-accent-700 hover:underline"
+                  className="col-span-2 text-xs text-muted hover:text-accent-700 hover:underline sm:col-span-1"
                 >
                   {p.supermarket_name} · {p.supermarket_city}
                 </Link>
-              </div>
-              <div className="flex items-center gap-3">
-                {move && <Sparkline previous={move.previous_price} latest={move.latest_price} />}
-                <ChangeBadge pct={move?.pct_change} />
-                <span className="text-lg font-bold text-accent-700">{p.price.toFixed(2)} €</span>
-                {p.image_url && (
-                  <a
-                    href={p.image_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-neutral-400 underline"
-                  >
-                    ver foto
-                  </a>
-                )}
-                <AddToBasketButton productId={p.product_id} />
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+
+                <div className="flex items-center gap-2 sm:justify-end">
+                  {move && <Sparkline previous={move.previous_price} latest={move.latest_price} />}
+                  <span className="num text-base font-bold text-foreground">{p.price.toFixed(2)} €</span>
+                </div>
+
+                <div className="sm:text-right">
+                  <ChangeBadge pct={move?.pct_change} />
+                </div>
+
+                <div className="flex items-center justify-end gap-2">
+                  {p.image_url && (
+                    <a
+                      href={p.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-muted underline"
+                    >
+                      foto
+                    </a>
+                  )}
+                  <AddToBasketButton productId={p.product_id} />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
 
       {(prices ?? []).length === 0 && (
-        <p className="mt-8 text-center text-sm text-neutral-400">
+        <p className="mt-8 text-center text-sm text-muted">
           No hay precios reportados{ciudad ? ` en ${ciudad}` : ""} todavía.
         </p>
       )}

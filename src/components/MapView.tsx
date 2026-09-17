@@ -6,7 +6,7 @@ import type { MapMarker } from "./Map";
 const Map = dynamic(() => import("./Map"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-96 w-full items-center justify-center rounded-xl bg-neutral-100 text-sm text-neutral-400">
+    <div className="flex h-96 w-full items-center justify-center rounded-xl bg-surface-2 text-sm text-muted">
       Cargando mapa...
     </div>
   ),

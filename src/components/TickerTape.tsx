@@ -8,7 +8,16 @@ export default async function TickerTape() {
   const supabase = await createClient();
   const moves = await getWeeklyPriceMoves(supabase);
 
-  if (moves.length === 0) return null;
+  if (moves.length === 0) {
+    return (
+      <div className="ticker-wrap">
+        <div className="flex items-center gap-2 px-5 py-2.5 text-xs text-[color:var(--board-ink)] opacity-60">
+          <span className="h-1.5 w-1.5 rounded-full bg-price-down" />
+          Aún no hay suficientes reportes repetidos esta semana para calcular variaciones de precio.
+        </div>
+      </div>
+    );
+  }
 
   const items = [...moves]
     .sort((a, b) => Math.abs(b.pct_change) - Math.abs(a.pct_change))
@@ -25,11 +34,11 @@ export default async function TickerTape() {
           return (
             <span
               key={`${m.product_id}::${m.supermarket_id}::${i}`}
-              className="flex shrink-0 items-center gap-1.5 font-mono text-xs"
+              className="num flex shrink-0 items-center gap-1.5 text-xs"
             >
               <span className="font-bold text-accent-400">{productSymbol(m.product_name)}</span>
-              <span className="text-neutral-300">{m.latest_price.toFixed(2)}€</span>
-              <span className={up ? "text-red-400" : "text-emerald-400"}>
+              <span className="text-[color:var(--board-ink)]">{m.latest_price.toFixed(2)}€</span>
+              <span className={up ? "text-price-up" : "text-price-down"}>
                 {up ? "▲" : "▼"} {Math.abs(m.pct_change).toFixed(1)}%
               </span>
             </span>

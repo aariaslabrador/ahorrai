@@ -56,7 +56,7 @@ function YesNoToggle({
 }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className="text-sm text-neutral-700">{label}</span>
+      <span className="text-sm text-muted">{label}</span>
       <div className="flex gap-1">
         <button
           type="button"
@@ -64,7 +64,7 @@ function YesNoToggle({
           className={`rounded-lg border px-2.5 py-1 text-xs font-medium ${
             value === true
               ? "border-accent-500 bg-accent-50 text-accent-700"
-              : "border-neutral-300 text-neutral-500 hover:bg-neutral-50"
+              : "border-line text-muted hover:bg-surface-2"
           }`}
         >
           Sí
@@ -75,7 +75,7 @@ function YesNoToggle({
           className={`rounded-lg border px-2.5 py-1 text-xs font-medium ${
             value === false
               ? "border-red-400 bg-red-50 text-red-600"
-              : "border-neutral-300 text-neutral-500 hover:bg-neutral-50"
+              : "border-line text-muted hover:bg-surface-2"
           }`}
         >
           No
@@ -100,8 +100,8 @@ export default function RatingForm({ supermarketId }: { supermarketId: string })
   const canSubmit = allScored && hasFishCounter !== null && hasButcher !== null;
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-4">
-      <p className="text-sm font-semibold text-neutral-800">Valora este supermercado</p>
+    <form action={formAction} className="flex flex-col gap-4 rounded-xl border border-line bg-surface p-4">
+      <p className="text-sm font-semibold text-foreground">Valora este supermercado</p>
 
       <input type="hidden" name="supermarket_id" value={supermarketId} readOnly />
       {CRITERIA.map((c) => (
@@ -118,7 +118,7 @@ export default function RatingForm({ supermarketId }: { supermarketId: string })
       <div className="flex flex-col gap-2">
         {CRITERIA.map((c) => (
           <div key={c.key} className="flex items-center justify-between gap-2">
-            <span className="text-sm text-neutral-700">{c.label}</span>
+            <span className="text-sm text-muted">{c.label}</span>
             <StarPicker
               name={c.label}
               value={scores[c.key]}
@@ -128,7 +128,7 @@ export default function RatingForm({ supermarketId }: { supermarketId: string })
         ))}
       </div>
 
-      <div className="flex flex-col gap-2 border-t border-neutral-100 pt-3">
+      <div className="flex flex-col gap-2 border-t border-line pt-3">
         <YesNoToggle label="🐟 ¿Tiene pescadería?" value={hasFishCounter} onChange={setHasFishCounter} />
         <YesNoToggle label="🥩 ¿Tiene carnicería?" value={hasButcher} onChange={setHasButcher} />
       </div>
@@ -137,7 +137,7 @@ export default function RatingForm({ supermarketId }: { supermarketId: string })
         name="comment"
         rows={2}
         placeholder="Comentario (opcional)"
-        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+        className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
       />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}

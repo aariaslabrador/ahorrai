@@ -106,3 +106,25 @@ export function averageChangeBySupermarket(moves: PriceMove[]): Map<string, numb
   });
   return result;
 }
+
+/**
+ * Precio "anterior" y "actual" medios por supermercado (promedio simple de todas sus
+ * parejas producto+precio con variación real esta semana). Solo para dibujar un
+ * sparkline de dos puntos reales, nunca para mostrar como precio de un producto.
+ */
+export function averagePricesBySupermarket(
+  moves: PriceMove[]
+): Map<string, { previous: number; latest: number }> {
+  const groups = new Map<string, { previous: number; latest: number }[]>();
+  for (const m of moves) {
+    if (!groups.has(m.supermarket_id)) groups.set(m.supermarket_id, []);
+    groups.get(m.supermarket_id)!.push({ previous: m.previous_price, latest: m.latest_price });
+  }
+  const result = new Map<string, { previous: number; latest: number }>();
+  groups.forEach((pairs, supermarketId) => {
+    const previous = pairs.reduce((sum, p) => sum + p.previous, 0) / pairs.length;
+    const latest = pairs.reduce((sum, p) => sum + p.latest, 0) / pairs.length;
+    result.set(supermarketId, { previous, latest });
+  });
+  return result;
+}

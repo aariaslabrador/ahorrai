@@ -85,9 +85,9 @@ export default function ComparePanel({
   const cheapestComplete = results?.find((r) => r.itemsMissing === 0);
 
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4">
-      <p className="text-sm font-semibold text-neutral-800">Cotiza tu cartera en supermercados cercanos</p>
-      <p className="mt-1 text-xs text-neutral-500">
+    <div className="rounded-xl border border-line bg-surface p-4">
+      <p className="text-sm font-semibold text-foreground">Cotiza tu cartera en supermercados cercanos</p>
+      <p className="mt-1 text-xs text-muted">
         Usamos tu ubicación para encontrar los supermercados más cercanos y sumar el precio de tu
         cartera en cada uno con los últimos precios reportados por la comunidad.
       </p>
@@ -102,12 +102,12 @@ export default function ComparePanel({
           {status === "locating" ? "Localizando..." : "📍 Cotizar cerca de mí"}
         </button>
 
-        <span className="text-xs text-neutral-400">o</span>
+        <span className="text-xs text-muted">o</span>
 
         <select
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-line px-3 py-2 text-sm"
         >
           <option value="">Elige una ciudad</option>
           {cities.map((c) => (
@@ -120,21 +120,21 @@ export default function ComparePanel({
           type="button"
           onClick={handleCityCompare}
           disabled={!selectedCity || status === "comparing" || totalItems === 0}
-          className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 disabled:opacity-60"
+          className="rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2 disabled:opacity-60"
         >
           Cotizar en esta ciudad
         </button>
       </div>
 
       {totalItems === 0 && (
-        <p className="mt-3 text-sm text-neutral-400">Añade productos a tu cartera para poder cotizarla.</p>
+        <p className="mt-3 text-sm text-muted">Añade productos a tu cartera para poder cotizarla.</p>
       )}
 
       {status === "error" && <p className="mt-3 text-sm text-red-600">{errorMsg}</p>}
-      {status === "comparing" && <p className="mt-3 text-sm text-neutral-500">Cotizando precios...</p>}
+      {status === "comparing" && <p className="mt-3 text-sm text-muted">Cotizando precios...</p>}
 
       {results && results.length === 0 && status === "idle" && (
-        <p className="mt-3 text-sm text-neutral-400">
+        <p className="mt-3 text-sm text-muted">
           No hay supermercados con precios reportados en esa zona todavía.
         </p>
       )}
@@ -147,18 +147,18 @@ export default function ComparePanel({
               <li
                 key={r.supermarket_id}
                 className={`rounded-lg border px-4 py-3 ${
-                  isCheapest ? "border-accent-400 bg-accent-50" : "border-neutral-200"
+                  isCheapest ? "border-accent-400 bg-accent-50" : "border-line"
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <Link
                       href={`/supermercados/${r.supermarket_id}`}
-                      className="font-semibold text-neutral-900 hover:underline"
+                      className="font-semibold text-foreground hover:underline"
                     >
                       {r.supermarket_name}
                     </Link>
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-muted">
                       {r.supermarket_city}
                       {r.distanceKm !== null && ` · ${r.distanceKm.toFixed(1)} km`}
                     </p>

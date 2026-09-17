@@ -14,46 +14,46 @@ export default function AddSupermarketForm() {
   return (
     <form action={formAction} className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="flex flex-col gap-4">
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Nombre
           <input
             name="name"
             required
             placeholder="Ej. Mercadona Gran Vía"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Cadena (opcional)
           <input
             name="chain"
             placeholder="Ej. Mercadona, Carrefour, Lidl..."
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Dirección
           <input
             name="address"
             required
             placeholder="Calle y número"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
           Ciudad
           <input
             name="city"
             required
             placeholder="Ej. Madrid"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
         <input type="hidden" name="lat" value={position?.lat ?? ""} />
         <input type="hidden" name="lng" value={position?.lng ?? ""} />
 
-        <p className="text-xs text-neutral-500">
+        <p className="text-xs text-muted">
           {position
             ? `Ubicación seleccionada: ${position.lat.toFixed(5)}, ${position.lng.toFixed(5)}`
             : "Haz clic en el mapa para marcar la ubicación exacta."}

@@ -1,21 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --background: #eef1ea;
-  --foreground: #1d2420;
+  --bg: #eef1ea;
+  --surface: #ffffff;
+  --surface-2: #e4e8de;
+  --ink: #1d2420;
+  --muted: #5c6660;
+  --line: #d7dccf;
+
+  --price-up: #c1442b;
+  --price-up-soft: #f7e2db;
+  --price-down: #2f7a52;
+  --price-down-soft: #dcefe2;
+
+  --accent-ink: #241705;
+
+  --board-bg: #12100c;
+  --board-ink: #eee7d8;
+  --board-border: #2c2820;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+
+  --color-price-up: var(--price-up);
+  --color-price-up-soft: var(--price-up-soft);
+  --color-price-down: var(--price-down);
+  --color-price-down-soft: var(--price-down-soft);
+  --color-accent-ink: var(--accent-ink);
+
   --font-sans: var(--font-work-sans);
   --font-mono: var(--font-space-mono);
   --font-display: var(--font-bricolage), var(--font-work-sans);
 
-  /* Color de marca: marigold/mostaza, en vez de un verde genérico de SaaS.
-     El verde (emerald) se reserva como color semántico de "baja de precio
-     / positivo" en ChangeBadge y RatingBreakdown — no forma parte de esta
-     escala. */
+  /* Color de marca: marigold/mostaza, en vez de un verde genérico de SaaS. */
   --color-accent-50: #fdf6e8;
   --color-accent-100: #faecc7;
   --color-accent-200: #f3d78f;
@@ -30,20 +53,38 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #14181a;
-    --foreground: #edeee7;
+    --bg: #14181a;
+    --surface: #1c2224;
+    --surface-2: #232b2b;
+    --ink: #edeee7;
+    --muted: #97a29a;
+    --line: #303836;
+
+    --price-up: #e18269;
+    --price-up-soft: #3a2018;
+    --price-down: #59b487;
+    --price-down-soft: #1c3327;
+
+    --board-bg: #0a0907;
+    --board-ink: #eee7d8;
+    --board-border: #221f18;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.num {
+  font-family: var(--font-space-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- Cinta de cotizaciones ---- */
 .ticker-wrap {
-  background: #12100c;
-  border-bottom: 1px solid #2c2820;
+  background: var(--board-bg);
+  border-bottom: 1px solid var(--board-border);
   overflow: hidden;
   position: relative;
 }
@@ -51,7 +92,7 @@ body {
   display: flex;
   width: max-content;
   gap: 30px;
-  padding: 7px 20px;
+  padding: 9px 20px;
   animation: ticker-marquee 34s linear infinite;
 }
 .ticker-wrap:hover .ticker-track {

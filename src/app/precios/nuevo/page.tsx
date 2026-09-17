@@ -25,8 +25,8 @@ export default async function NuevoPrecioPage({
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8">
-      <h1 className="font-display text-2xl font-bold text-neutral-900">Reportar precio</h1>
-      <p className="mt-1 text-sm text-neutral-500">
+      <h1 className="font-display text-2xl font-bold text-foreground">Reportar precio</h1>
+      <p className="mt-1 text-sm text-muted">
         Haz una foto de la etiqueta del precio: intentaremos leerlo automáticamente para que solo
         tengas que confirmarlo.
       </p>
@@ -35,7 +35,7 @@ export default async function NuevoPrecioPage({
         {supermarkets && supermarkets.length > 0 ? (
           <ReportPriceForm supermarkets={supermarkets} defaultSupermarketId={supermarket} />
         ) : (
-          <p className="text-sm text-neutral-400">
+          <p className="text-sm text-muted">
             Todavía no hay supermercados registrados. Añade uno primero.
           </p>
         )}
