@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-4 py-16">
-      <h1 className="text-2xl font-bold text-neutral-900">Inicia sesión</h1>
+      <h1 className="font-display text-2xl font-bold text-neutral-900">Inicia sesión</h1>
       <p className="mt-1 text-sm text-neutral-500">
         Accede para valorar supermercados y reportar precios.
       </p>
@@ -23,7 +23,7 @@ export default function LoginPage() {
             type="email"
             name="email"
             required
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -32,7 +32,7 @@ export default function LoginPage() {
             type="password"
             name="password"
             required
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -41,7 +41,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={pending}
-          className="mt-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+          className="mt-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:opacity-60"
         >
           {pending ? "Entrando..." : "Entrar"}
         </button>
@@ -49,7 +49,7 @@ export default function LoginPage() {
 
       <p className="mt-6 text-sm text-neutral-500">
         ¿No tienes cuenta?{" "}
-        <Link href="/registro" className="font-medium text-emerald-700 hover:underline">
+        <Link href="/registro" className="font-medium text-accent-700 hover:underline">
           Regístrate
         </Link>
       </p>

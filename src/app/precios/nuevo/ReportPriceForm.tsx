@@ -83,7 +83,7 @@ export default function ReportPriceForm({
             name="supermarket_id"
             required
             defaultValue={defaultSupermarketId ?? ""}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           >
             <option value="" disabled>
               Selecciona un supermercado
@@ -102,7 +102,7 @@ export default function ReportPriceForm({
             name="product_name"
             required
             placeholder="Ej. Leche entera 1L"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -111,7 +111,7 @@ export default function ReportPriceForm({
           <input
             name="brand"
             placeholder="Ej. Hacendado"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -124,7 +124,7 @@ export default function ReportPriceForm({
             capture="environment"
             required
             onChange={handleFileChange}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-emerald-50 file:px-3 file:py-1.5 file:text-emerald-700"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-accent-50 file:px-3 file:py-1.5 file:text-accent-700"
           />
         </label>
 
@@ -143,7 +143,7 @@ export default function ReportPriceForm({
                 type="button"
                 key={c}
                 onClick={() => setPrice(c)}
-                className="rounded-full border border-neutral-300 px-2 py-0.5 hover:border-emerald-400 hover:text-emerald-700"
+                className="rounded-full border border-neutral-300 px-2 py-0.5 hover:border-accent-400 hover:text-accent-700"
               >
                 {c}
               </button>
@@ -161,7 +161,7 @@ export default function ReportPriceForm({
             required
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -174,7 +174,7 @@ export default function ReportPriceForm({
         <button
           type="submit"
           disabled={pending || status !== "ready" || !imageUrl}
-          className="mt-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "Enviando..." : "Enviar precio"}
         </button>

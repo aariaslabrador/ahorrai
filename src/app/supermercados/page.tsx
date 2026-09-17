@@ -43,7 +43,7 @@ export default async function SupermercadosPage({
     <div className="mx-auto w-full max-w-6xl px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Supermercados</h1>
+          <h1 className="font-display text-2xl font-bold text-neutral-900">Supermercados</h1>
           <p className="mt-1 text-sm text-neutral-500">
             {ciudad ? `Mostrando resultados en ${ciudad}` : "Todas las ciudades"}
           </p>
@@ -57,7 +57,7 @@ export default async function SupermercadosPage({
           </Link>
           <Link
             href="/supermercados/nuevo"
-            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+            className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700"
           >
             + Añadir supermercado
           </Link>
@@ -96,7 +96,7 @@ export default async function SupermercadosPage({
             <li key={s.id}>
               <Link
                 href={`/supermercados/${s.id}`}
-                className="block rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
+                className="block rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:border-accent-300 hover:shadow-md"
               >
                 <p className="font-semibold text-neutral-900">{s.name}</p>
                 {s.chain && <p className="text-xs uppercase tracking-wide text-neutral-400">{s.chain}</p>}

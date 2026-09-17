@@ -61,7 +61,7 @@ export default async function CestaPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8">
-      <h1 className="text-2xl font-bold text-neutral-900">Mi cartera</h1>
+      <h1 className="font-display text-2xl font-bold text-neutral-900">Mi cartera</h1>
       <p className="mt-1 text-sm text-neutral-500">
         Añade los productos que sueles comprar y pide cotización a los supermercados cercanos para
         ver dónde te sale más barata esa misma cesta.

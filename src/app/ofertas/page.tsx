@@ -3,7 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import AddToBasketButton from "@/components/AddToBasketButton";
 import PriceSourceBadge from "@/components/PriceSourceBadge";
 import ChangeBadge from "@/components/ChangeBadge";
-import { getWeeklyPriceMoves, movesByPairKey } from "@/lib/priceHistory";
+import Sparkline from "@/components/Sparkline";
+import { getWeeklyPriceMoves } from "@/lib/priceHistory";
 import { productSymbol } from "@/lib/ticker";
 
 export default async function OfertasPage({
@@ -29,11 +30,11 @@ export default async function OfertasPage({
     getWeeklyPriceMoves(supabase),
   ]);
   const cities = Array.from(new Set((cityRows ?? []).map((c) => c.city))).sort();
-  const changeByPair = movesByPairKey(moves);
+  const moveByPair = new Map(moves.map((m) => [`${m.product_id}::${m.supermarket_id}`, m]));
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
-      <h1 className="text-2xl font-bold text-neutral-900">Cotizaciones</h1>
+      <h1 className="font-display text-2xl font-bold text-neutral-900">Cotizaciones</h1>
       <p className="mt-1 text-sm text-neutral-500">
         Último precio reportado de cada producto y su variación en los últimos 7 días.
       </p>
@@ -67,41 +68,45 @@ export default async function OfertasPage({
       </form>
 
       <ul className="mt-6 divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
-        {(prices ?? []).map((p) => (
-          <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-[11px] font-bold text-emerald-700">
-                  {productSymbol(p.product_name)}
-                </span>
-                <p className="font-medium text-neutral-800">{p.product_name}</p>
-                <PriceSourceBadge source={p.source} />
-              </div>
-              {p.product_brand && <p className="text-xs text-neutral-400">{p.product_brand}</p>}
-              <Link
-                href={`/supermercados/${p.supermarket_id}`}
-                className="text-xs text-emerald-700 hover:underline"
-              >
-                {p.supermarket_name} · {p.supermarket_city}
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <ChangeBadge pct={changeByPair.get(`${p.product_id}::${p.supermarket_id}`)} />
-              <span className="text-lg font-bold text-emerald-700">{p.price.toFixed(2)} €</span>
-              {p.image_url && (
-                <a
-                  href={p.image_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-neutral-400 underline"
+        {(prices ?? []).map((p) => {
+          const move = moveByPair.get(`${p.product_id}::${p.supermarket_id}`);
+          return (
+            <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-[11px] font-bold text-accent-700">
+                    {productSymbol(p.product_name)}
+                  </span>
+                  <p className="font-medium text-neutral-800">{p.product_name}</p>
+                  <PriceSourceBadge source={p.source} />
+                </div>
+                {p.product_brand && <p className="text-xs text-neutral-400">{p.product_brand}</p>}
+                <Link
+                  href={`/supermercados/${p.supermarket_id}`}
+                  className="text-xs text-accent-700 hover:underline"
                 >
-                  ver foto
-                </a>
-              )}
-              <AddToBasketButton productId={p.product_id} />
-            </div>
-          </li>
-        ))}
+                  {p.supermarket_name} · {p.supermarket_city}
+                </Link>
+              </div>
+              <div className="flex items-center gap-3">
+                {move && <Sparkline previous={move.previous_price} latest={move.latest_price} />}
+                <ChangeBadge pct={move?.pct_change} />
+                <span className="text-lg font-bold text-accent-700">{p.price.toFixed(2)} €</span>
+                {p.image_url && (
+                  <a
+                    href={p.image_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-neutral-400 underline"
+                  >
+                    ver foto
+                  </a>
+                )}
+                <AddToBasketButton productId={p.product_id} />
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
       {(prices ?? []).length === 0 && (

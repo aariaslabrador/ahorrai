@@ -53,13 +53,13 @@ export default async function SupermercadoDetailPage({
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
-      <Link href="/supermercados" className="text-sm text-neutral-500 hover:text-emerald-700">
+      <Link href="/supermercados" className="text-sm text-neutral-500 hover:text-accent-700">
         ← Volver a supermercados
       </Link>
 
       <div className="mt-2 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">{supermarket.name}</h1>
+          <h1 className="font-display text-2xl font-bold text-neutral-900">{supermarket.name}</h1>
           {supermarket.chain && (
             <p className="text-xs uppercase tracking-wide text-neutral-400">{supermarket.chain}</p>
           )}
@@ -85,7 +85,7 @@ export default async function SupermercadoDetailPage({
         </div>
         <Link
           href={`/precios/nuevo?supermarket=${supermarket.id}`}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+          className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700"
         >
           📷 Reportar precio aquí
         </Link>
@@ -111,7 +111,7 @@ export default async function SupermercadoDetailPage({
               <li key={p.id} className="flex items-center justify-between gap-4 px-4 py-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-mono text-[11px] font-bold text-emerald-700">
+                    <span className="font-mono text-[11px] font-bold text-accent-700">
                       {productSymbol(p.product_name)}
                     </span>
                     <p className="font-medium text-neutral-800">{p.product_name}</p>
@@ -121,7 +121,7 @@ export default async function SupermercadoDetailPage({
                 </div>
                 <div className="flex items-center gap-3">
                   <ChangeBadge pct={changeByPair.get(`${p.product_id}::${p.supermarket_id}`)} />
-                  <span className="font-semibold text-emerald-700">{p.price.toFixed(2)} €</span>
+                  <span className="font-semibold text-accent-700">{p.price.toFixed(2)} €</span>
                   {p.image_url && (
                     <a
                       href={p.image_url}

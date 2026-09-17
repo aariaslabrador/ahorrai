@@ -22,7 +22,7 @@ export default function AddToBasketButton({ productId }: { productId: string }) 
         type="button"
         onClick={handleClick}
         disabled={isPending}
-        className="rounded-full border border-emerald-300 px-2.5 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 disabled:opacity-60"
+        className="rounded-full border border-accent-300 px-2.5 py-1 text-xs font-medium text-accent-700 hover:bg-accent-50 disabled:opacity-60"
       >
         {done ? "✓ En tu cartera" : isPending ? "Añadiendo..." : "+ Cartera"}
       </button>

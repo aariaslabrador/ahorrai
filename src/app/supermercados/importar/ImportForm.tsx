@@ -81,7 +81,7 @@ export default function ImportForm() {
             onChange={(e) => setCity(e.target.value)}
             required
             placeholder="Ej. Córdoba"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-1 min-w-[160px] flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -90,20 +90,20 @@ export default function ImportForm() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="supermercado, Mercadona..."
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+          className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 disabled:opacity-60"
         >
           {status === "searching" ? "Buscando..." : "Buscar en Google Maps"}
         </button>
       </form>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
-      {successMsg && <p className="text-sm text-emerald-600">{successMsg}</p>}
+      {successMsg && <p className="text-sm text-accent-600">{successMsg}</p>}
 
       {results && results.length === 0 && (
         <p className="text-sm text-neutral-400">No se encontraron supermercados para esa búsqueda.</p>
@@ -120,7 +120,7 @@ export default function ImportForm() {
               type="button"
               onClick={handleImport}
               disabled={isPending || selectedCount === 0}
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+              className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 disabled:opacity-60"
             >
               {status === "importing" ? "Importando..." : `Importar seleccionados (${selectedCount})`}
             </button>
