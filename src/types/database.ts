@@ -40,7 +40,7 @@ export type Product = {
   created_at: string;
 };
 
-export type PriceSource = "community" | "scraper";
+export type PriceSource = "community" | "scraper" | "flyer";
 
 export type PriceReport = {
   id: string;

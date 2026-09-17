@@ -121,11 +121,13 @@ src/
   scripts/
     import-mercadona.mjs          Importador opcional de precios (ver más abajo)
     import-google-places.mjs      Importador opcional de supermercados vía Google Places (ver más abajo)
+    import-flyer.mjs              Importador opcional de precios desde fotos de folletos (ver más abajo)
 supabase/
   migrations/
     0001_init.sql                 Esquema base (supermercados, valoraciones, precios)
     0002_basket.sql               Cesta de la compra
     0003_price_source.sql         Distingue precios 'community' vs 'scraper'
+    0005_flyer_price_source.sql   Añade el origen de precio 'flyer'
   seed_demo.sql                   Datos de ejemplo opcionales para ver la app con datos
   remove_demo.sql                 Quita exactamente los datos de seed_demo.sql
 ```
@@ -199,6 +201,46 @@ Supabase, en **Project Settings → API**) porque se salta la seguridad por
 fila (RLS) para poder insertar precios sin que haya un usuario detrás.
 **Nunca** la pongas con prefijo `NEXT_PUBLIC_` ni la uses en código que se
 ejecute en el navegador — se ejecuta solo en tu máquina, a mano.
+
+## Importar precios de un folleto semanal (Lidl y similares)
+
+Muchos supermercados (Lidl entre ellos) publican folletos de ofertas
+semanales en su web, normalmente como imágenes o un catálogo interactivo,
+no como una API de datos. Automatizar la descarga de esas imágenes sería
+scraping recurrente contra su web — probablemente contra sus condiciones de
+uso, y exactamente lo que este proyecto evita (ver la sección anterior).
+
+[`scripts/import-flyer.mjs`](./scripts/import-flyer.mjs) resuelve esto de
+otra forma: **tú** te haces las fotos del folleto a mano (o exportas el PDF
+a imágenes), navegando la web como cualquier visitante, y se las pasas al
+script como archivos locales. El script nunca se conecta a la web del
+supermercado — solo le pide a la API de Claude que lea los productos y
+precios de esas imágenes (visión), y los inserta como precios normales en
+`price_reports` con `source = 'flyer'`.
+
+**Necesitas:**
+
+1. Una clave de [console.anthropic.com](https://console.anthropic.com) en
+   `ANTHROPIC_API_KEY` (servidor, sin prefijo `NEXT_PUBLIC_`).
+2. `SUPABASE_SERVICE_ROLE_KEY`, igual que en el importador de Mercadona.
+3. Las imágenes del folleto guardadas en tu máquina.
+
+**Uso:**
+
+```bash
+# 1) Prueba solo la extracción, sin escribir nada en Supabase:
+node scripts/import-flyer.mjs --dry-run --file folleto-pag1.jpg --file folleto-pag2.jpg
+
+# 2) O con todas las imágenes de una carpeta, en orden:
+node scripts/import-flyer.mjs --dry-run --dir ./folletos/lidl-semana-38
+
+# 3) Si lo detectado tiene sentido, impórtalo de verdad:
+npm run import:folleto -- --supermarket <uuid> --dir ./folletos/lidl-semana-38
+```
+
+Cada imagen se sube también a Supabase Storage (`price-photos`) y su URL
+pública queda como evidencia (`image_url`) de los precios que salieron de
+ella, igual que las fotos que suben los usuarios.
 
 ## Importar supermercados desde Google Maps
 
