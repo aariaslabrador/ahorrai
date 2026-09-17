@@ -20,19 +20,19 @@ export default async function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="flex items-center gap-2 text-lg font-bold text-neutral-900">
-          <span className="text-xl">💹</span> ahorr<span className="text-emerald-600">AI</span>
+        <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold text-neutral-900">
+          <span className="text-xl">💹</span> ahorr<span className="text-accent-600">AI</span>
         </Link>
 
         <div className="hidden items-center gap-6 text-sm font-medium text-neutral-600 sm:flex">
-          <Link href="/supermercados" className="hover:text-emerald-700">
+          <Link href="/supermercados" className="hover:text-accent-700">
             Mercados
           </Link>
-          <Link href="/ofertas" className="hover:text-emerald-700">
+          <Link href="/ofertas" className="hover:text-accent-700">
             Cotizaciones
           </Link>
           {user && (
-            <Link href="/precios/nuevo" className="hover:text-emerald-700">
+            <Link href="/precios/nuevo" className="hover:text-accent-700">
               Reportar precio
             </Link>
           )}
@@ -47,7 +47,7 @@ export default async function Navbar() {
             >
               🛒
               {cartCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-emerald-600 px-1 text-[10px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-600 px-1 text-[10px] font-bold text-white">
                   {cartCount}
                 </span>
               )}
@@ -73,7 +73,7 @@ export default async function Navbar() {
               </Link>
               <Link
                 href="/registro"
-                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-emerald-700"
+                className="rounded-lg bg-accent-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-accent-700"
               >
                 Registrarse
               </Link>

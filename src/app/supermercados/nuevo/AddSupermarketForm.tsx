@@ -20,7 +20,7 @@ export default function AddSupermarketForm() {
             name="name"
             required
             placeholder="Ej. Mercadona Gran Vía"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -28,7 +28,7 @@ export default function AddSupermarketForm() {
           <input
             name="chain"
             placeholder="Ej. Mercadona, Carrefour, Lidl..."
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -37,7 +37,7 @@ export default function AddSupermarketForm() {
             name="address"
             required
             placeholder="Calle y número"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -46,7 +46,7 @@ export default function AddSupermarketForm() {
             name="city"
             required
             placeholder="Ej. Madrid"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -64,7 +64,7 @@ export default function AddSupermarketForm() {
         <button
           type="submit"
           disabled={pending}
-          className="mt-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+          className="mt-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:opacity-60"
         >
           {pending ? "Guardando..." : "Guardar supermercado"}
         </button>

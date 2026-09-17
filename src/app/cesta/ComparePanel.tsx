@@ -97,7 +97,7 @@ export default function ComparePanel({
           type="button"
           onClick={handleUseLocation}
           disabled={status === "locating" || status === "comparing" || totalItems === 0}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+          className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 disabled:opacity-60"
         >
           {status === "locating" ? "Localizando..." : "📍 Cotizar cerca de mí"}
         </button>
@@ -147,7 +147,7 @@ export default function ComparePanel({
               <li
                 key={r.supermarket_id}
                 className={`rounded-lg border px-4 py-3 ${
-                  isCheapest ? "border-emerald-400 bg-emerald-50" : "border-neutral-200"
+                  isCheapest ? "border-accent-400 bg-accent-50" : "border-neutral-200"
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -164,9 +164,9 @@ export default function ComparePanel({
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-emerald-700">{r.total.toFixed(2)} €</p>
+                    <p className="text-lg font-bold text-accent-700">{r.total.toFixed(2)} €</p>
                     {isCheapest && (
-                      <span className="text-xs font-medium text-emerald-600">🏆 Mejor cotización</span>
+                      <span className="text-xs font-medium text-accent-600">🏆 Mejor cotización</span>
                     )}
                   </div>
                 </div>

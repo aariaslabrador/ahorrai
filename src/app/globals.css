@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #eef1ea;
+  --foreground: #1d2420;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-work-sans);
+  --font-mono: var(--font-space-mono);
+  --font-display: var(--font-bricolage), var(--font-work-sans);
+
+  /* Color de marca: marigold/mostaza, en vez de un verde genérico de SaaS.
+     El verde (emerald) se reserva como color semántico de "baja de precio
+     / positivo" en ChangeBadge y RatingBreakdown — no forma parte de esta
+     escala. */
+  --color-accent-50: #fdf6e8;
+  --color-accent-100: #faecc7;
+  --color-accent-200: #f3d78f;
+  --color-accent-300: #eabd52;
+  --color-accent-400: #e0a638;
+  --color-accent-500: #d99a2b;
+  --color-accent-600: #b97f1c;
+  --color-accent-700: #93630f;
+  --color-accent-800: #714b0c;
+  --color-accent-900: #5c3d0a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #14181a;
+    --foreground: #edeee7;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---- Cinta de cotizaciones ---- */
+.ticker-wrap {
+  background: #12100c;
+  border-bottom: 1px solid #2c2820;
+  overflow: hidden;
+  position: relative;
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 30px;
+  padding: 7px 20px;
+  animation: ticker-marquee 34s linear infinite;
+}
+.ticker-wrap:hover .ticker-track {
+  animation-play-state: paused;
+}
+@keyframes ticker-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+  .ticker-wrap {
+    overflow-x: auto;
+  }
 }

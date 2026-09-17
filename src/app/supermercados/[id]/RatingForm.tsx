@@ -63,7 +63,7 @@ function YesNoToggle({
           onClick={() => onChange(true)}
           className={`rounded-lg border px-2.5 py-1 text-xs font-medium ${
             value === true
-              ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+              ? "border-accent-500 bg-accent-50 text-accent-700"
               : "border-neutral-300 text-neutral-500 hover:bg-neutral-50"
           }`}
         >
@@ -137,16 +137,16 @@ export default function RatingForm({ supermarketId }: { supermarketId: string })
         name="comment"
         rows={2}
         placeholder="Comentario (opcional)"
-        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+        className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
       />
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
-      {state.success && <p className="text-sm text-emerald-600">¡Gracias por tu valoración!</p>}
+      {state.success && <p className="text-sm text-accent-600">¡Gracias por tu valoración!</p>}
 
       <button
         type="submit"
         disabled={pending || !canSubmit}
-        className="self-start rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+        className="self-start rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:opacity-60"
       >
         {pending ? "Enviando..." : "Enviar valoración"}
       </button>

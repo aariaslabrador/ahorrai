@@ -11,7 +11,7 @@ export default function RegistroPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-4 py-16">
-      <h1 className="text-2xl font-bold text-neutral-900">Crea tu cuenta</h1>
+      <h1 className="font-display text-2xl font-bold text-neutral-900">Crea tu cuenta</h1>
       <p className="mt-1 text-sm text-neutral-500">
         Únete para descubrir y compartir las mejores ofertas de tu ciudad.
       </p>
@@ -23,7 +23,7 @@ export default function RegistroPage() {
             type="text"
             name="full_name"
             required
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -32,7 +32,7 @@ export default function RegistroPage() {
             type="email"
             name="email"
             required
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -42,7 +42,7 @@ export default function RegistroPage() {
             name="password"
             required
             minLength={6}
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
 
@@ -51,7 +51,7 @@ export default function RegistroPage() {
         <button
           type="submit"
           disabled={pending}
-          className="mt-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+          className="mt-2 rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:opacity-60"
         >
           {pending ? "Creando cuenta..." : "Crear cuenta"}
         </button>
@@ -59,7 +59,7 @@ export default function RegistroPage() {
 
       <p className="mt-6 text-sm text-neutral-500">
         ¿Ya tienes cuenta?{" "}
-        <Link href="/login" className="font-medium text-emerald-700 hover:underline">
+        <Link href="/login" className="font-medium text-accent-700 hover:underline">
           Inicia sesión
         </Link>
       </p>

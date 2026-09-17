@@ -25,7 +25,7 @@ export default async function NuevoPrecioPage({
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8">
-      <h1 className="text-2xl font-bold text-neutral-900">Reportar precio</h1>
+      <h1 className="font-display text-2xl font-bold text-neutral-900">Reportar precio</h1>
       <p className="mt-1 text-sm text-neutral-500">
         Haz una foto de la etiqueta del precio: intentaremos leerlo automáticamente para que solo
         tengas que confirmarlo.

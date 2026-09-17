@@ -67,7 +67,7 @@ export default function Map({ markers, center, zoom = 13, className, onMapClick 
         <Marker key={m.id} position={[m.lat, m.lng]}>
           <Popup>
             {m.href ? (
-              <a href={m.href} className="font-medium text-emerald-700">
+              <a href={m.href} className="font-medium text-accent-700">
                 {m.label}
               </a>
             ) : (

@@ -17,7 +17,7 @@ export default function AddProductForm({ knownProducts }: { knownProducts: strin
           list="productos-conocidos"
           required
           placeholder="Ej. Leche entera 1L"
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
         />
         <datalist id="productos-conocidos">
           {knownProducts.map((p) => (
@@ -30,7 +30,7 @@ export default function AddProductForm({ knownProducts }: { knownProducts: strin
         <input
           name="brand"
           placeholder="Opcional"
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
         />
       </label>
       <label className="flex w-20 flex-col gap-1 text-sm font-medium text-neutral-700">
@@ -40,13 +40,13 @@ export default function AddProductForm({ knownProducts }: { knownProducts: strin
           type="number"
           min={1}
           defaultValue={1}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
         />
       </label>
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+        className="rounded-lg bg-accent-600 px-4 py-2 text-sm font-semibold text-white hover:bg-accent-700 disabled:opacity-60"
       >
         {pending ? "Añadiendo..." : "Añadir"}
       </button>
