@@ -30,6 +30,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@supabase/supabase-js";
+import { mediaTypeFor, uploadFlyerImage, insertFlyerProducts } from "./lib/flyerInsert.mjs";
 
 const MODEL = "claude-sonnet-5";
 const VALID_EXT = new Set([".jpg", ".jpeg", ".png", ".webp"]);
@@ -69,14 +70,6 @@ function parseArgs(argv) {
     else if (a === "--help" || a === "-h") args.help = true;
   }
   return args;
-}
-
-function mediaTypeFor(file) {
-  const ext = path.extname(file).toLowerCase();
-  if (ext === ".jpg" || ext === ".jpeg") return "image/jpeg";
-  if (ext === ".png") return "image/png";
-  if (ext === ".webp") return "image/webp";
-  throw new Error(`Formato no soportado: ${file} (usa jpg/png/webp)`);
 }
 
 async function extractFromImage(client, filePath) {
@@ -194,45 +187,8 @@ async function main() {
     }
 
     // Sube la imagen del folleto una vez y reutiliza la URL como evidencia de todos sus productos.
-    let imageUrl = null;
-    try {
-      const bytes = fs.readFileSync(file);
-      const storagePath = `flyers/${args.supermarket}/${Date.now()}-${path.basename(file)}`;
-      const { error: uploadError } = await supabase.storage
-        .from("price-photos")
-        .upload(storagePath, bytes, { contentType: mediaTypeFor(file) });
-      if (uploadError) throw uploadError;
-      imageUrl = supabase.storage.from("price-photos").getPublicUrl(storagePath).data.publicUrl;
-    } catch (err) {
-      errors.push(`Subida de imagen ${file}: ${err.message}`);
-    }
-
-    for (const p of products) {
-      if (!p.name || !Number.isFinite(p.price) || p.price <= 0) continue;
-
-      const { data: product, error: productError } = await supabase
-        .from("products")
-        .upsert({ name: p.name.trim(), brand: (p.brand ?? "").trim() }, { onConflict: "name,brand" })
-        .select("id")
-        .single();
-      if (productError || !product) {
-        errors.push(`Producto "${p.name}": ${productError?.message ?? "error desconocido"}`);
-        continue;
-      }
-
-      const { error: priceError } = await supabase.from("price_reports").insert({
-        product_id: product.id,
-        supermarket_id: args.supermarket,
-        price: p.price,
-        source: "flyer",
-        image_url: imageUrl,
-      });
-      if (priceError) {
-        errors.push(`Precio "${p.name}": ${priceError.message}`);
-        continue;
-      }
-      totalInserted++;
-    }
+    const imageUrl = await uploadFlyerImage(supabase, args.supermarket, file, errors);
+    totalInserted += await insertFlyerProducts(supabase, args.supermarket, products, imageUrl, errors);
   }
 
   console.log("\n— Resumen —");

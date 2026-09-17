@@ -121,7 +121,9 @@ src/
   scripts/
     import-mercadona.mjs          Importador opcional de precios (ver más abajo)
     import-google-places.mjs      Importador opcional de supermercados vía Google Places (ver más abajo)
-    import-flyer.mjs              Importador opcional de precios desde fotos de folletos (ver más abajo)
+    import-flyer.mjs              Importador opcional de precios desde fotos de folletos, vía API de Claude (ver más abajo)
+    import-flyer-json.mjs         Igual, pero desde un JSON ya extraído a mano/gratis (ver más abajo)
+    lib/flyerInsert.mjs           Lógica de inserción compartida por los dos importadores de folletos
 supabase/
   migrations/
     0001_init.sql                 Esquema base (supermercados, valoraciones, precios)
@@ -241,6 +243,34 @@ npm run import:folleto -- --supermarket <uuid> --dir ./folletos/lidl-semana-38
 Cada imagen se sube también a Supabase Storage (`price-photos`) y su URL
 pública queda como evidencia (`image_url`) de los precios que salieron de
 ella, igual que las fotos que suben los usuarios.
+
+### Probarlo gratis, sin clave de Anthropic
+
+`import-flyer.mjs` llama a la API de pago de Claude. Para probar el flujo
+sin gastar nada, usa [`scripts/import-flyer-json.mjs`](./scripts/import-flyer-json.mjs):
+hace exactamente lo mismo (sube la imagen, crea el producto, inserta el
+precio con `source = 'flyer'`) pero a partir de un JSON que ya tienes tú
+extraído — no llama a ninguna API.
+
+```bash
+# 1) Pega la foto del folleto en cualquier chat de Claude (claude.ai, la
+#    app, o aquí mismo en Claude Code) y pídele algo como:
+#
+#      "Extrae los productos y precios de esta foto de un folleto de
+#      supermercado. Devuélvelo solo como JSON con este formato exacto:
+#      {"products": [{"name": "...", "brand": "", "price": 1.99, "unit": "..."}]}"
+#
+# 2) Guarda esa respuesta en un archivo, p. ej. folleto.json
+
+# 3) Valida el contenido sin tocar Supabase:
+node scripts/import-flyer-json.mjs --json folleto.json --dry-run
+
+# 4) Si tiene sentido, impórtalo de verdad (incluye la foto como evidencia):
+npm run import:folleto-json -- --supermarket <uuid> --json folleto.json --image folleto-pag1.jpg
+```
+
+Cuando quieras automatizarlo de verdad cada semana sin copiar/pegar a mano,
+`import-flyer.mjs` (con `ANTHROPIC_API_KEY`) hace la extracción sola.
 
 ## Importar supermercados desde Google Maps
 
