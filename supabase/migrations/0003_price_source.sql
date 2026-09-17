@@ -1,4 +1,4 @@
--- ValoraMercados: distinguir precios reportados por la comunidad de precios
+-- ahorrAI: distinguir precios reportados por la comunidad de precios
 -- importados automáticamente (scraper). Ejecutar después de 0002_basket.sql.
 
 alter table public.price_reports

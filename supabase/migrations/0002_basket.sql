@@ -1,4 +1,4 @@
--- ValoraMercados: cesta de la compra
+-- ahorrAI: cesta de la compra
 -- Ejecutar después de 0001_init.sql en el SQL Editor de Supabase.
 
 -- ─────────────────────────────────────────────

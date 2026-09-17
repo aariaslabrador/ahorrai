@@ -1,4 +1,4 @@
--- ValoraMercados: esquema inicial
+-- ahorrAI: esquema inicial
 -- Ejecutar en el SQL Editor de Supabase (o vía `supabase db push`).
 
 -- ─────────────────────────────────────────────

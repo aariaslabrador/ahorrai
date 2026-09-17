@@ -70,7 +70,7 @@ export default async function HomePage() {
 
           <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-wide text-neutral-400">
-              Índice ValoraMercados
+              Índice ahorrAI
             </p>
             <p className="mt-1 text-3xl font-bold text-neutral-900">
               {overallChange === null ? "—" : `${overallChange >= 0 ? "+" : ""}${overallChange.toFixed(1)}%`}
