@@ -1,4 +1,4 @@
--- ValoraMercados: datos de ejemplo para ver la app "con vida"
+-- ahorrAI: datos de ejemplo para ver la app "con vida"
 --
 -- Esto NO es necesario para que la app funcione: es solo para tener algo
 -- real que enseñar (índice, cotizaciones, mayores movimientos de la semana)
