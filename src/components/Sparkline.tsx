@@ -39,11 +39,11 @@ export default function Sparkline({
         y1={y1}
         x2={x2}
         y2={y2}
-        stroke={up ? "#dc2626" : "#059669"}
+        style={{ stroke: up ? "var(--price-up)" : "var(--price-down)" }}
         strokeWidth={1.5}
         strokeLinecap="round"
       />
-      <circle cx={x2} cy={y2} r={1.75} fill={up ? "#dc2626" : "#059669"} />
+      <circle cx={x2} cy={y2} r={1.75} style={{ fill: up ? "var(--price-up)" : "var(--price-down)" }} />
     </svg>
   );
 }

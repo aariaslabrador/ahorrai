@@ -74,23 +74,23 @@ export default function ImportForm() {
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSearch} className="flex flex-wrap items-end gap-2">
-        <label className="flex flex-1 min-w-[160px] flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-1 min-w-[160px] flex-col gap-1 text-sm font-medium text-muted">
           Ciudad
           <input
             value={city}
             onChange={(e) => setCity(e.target.value)}
             required
             placeholder="Ej. Córdoba"
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
-        <label className="flex flex-1 min-w-[160px] flex-col gap-1 text-sm font-medium text-neutral-700">
+        <label className="flex flex-1 min-w-[160px] flex-col gap-1 text-sm font-medium text-muted">
           Qué buscar (opcional)
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="supermercado, Mercadona..."
-            className="rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500"
           />
         </label>
         <button
@@ -106,13 +106,13 @@ export default function ImportForm() {
       {successMsg && <p className="text-sm text-accent-600">{successMsg}</p>}
 
       {results && results.length === 0 && (
-        <p className="text-sm text-neutral-400">No se encontraron supermercados para esa búsqueda.</p>
+        <p className="text-sm text-muted">No se encontraron supermercados para esa búsqueda.</p>
       )}
 
       {results && results.length > 0 && (
         <div>
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-neutral-700">
+            <p className="text-sm font-medium text-muted">
               {results.length} resultado{results.length === 1 ? "" : "s"} — {selectedCount} seleccionado
               {selectedCount === 1 ? "" : "s"}
             </p>
@@ -126,7 +126,7 @@ export default function ImportForm() {
             </button>
           </div>
 
-          <ul className="mt-3 divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
+          <ul className="mt-3 divide-y divide-line rounded-xl border border-line bg-surface">
             {results.map((r, i) => (
               <li key={`${r.name}-${r.address}`} className="flex items-start gap-3 px-4 py-3">
                 <input
@@ -137,15 +137,15 @@ export default function ImportForm() {
                   className="mt-1"
                 />
                 <div>
-                  <p className="font-medium text-neutral-800">
+                  <p className="font-medium text-foreground">
                     {r.name}{" "}
                     {r.alreadyExists && (
-                      <span className="ml-1 rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500">
+                      <span className="ml-1 rounded-full bg-surface-2 px-2 py-0.5 text-xs text-muted">
                         Ya existe
                       </span>
                     )}
                   </p>
-                  <p className="text-xs text-neutral-500">{r.address}</p>
+                  <p className="text-xs text-muted">{r.address}</p>
                 </div>
               </li>
             ))}

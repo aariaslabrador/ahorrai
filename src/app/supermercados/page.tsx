@@ -3,7 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import MapView from "@/components/MapView";
 import RatingStars from "@/components/RatingStars";
 import ChangeBadge from "@/components/ChangeBadge";
-import { averageChangeBySupermarket, getWeeklyPriceMoves } from "@/lib/priceHistory";
+import Sparkline from "@/components/Sparkline";
+import { averageChangeBySupermarket, averagePricesBySupermarket, getWeeklyPriceMoves } from "@/lib/priceHistory";
 
 export default async function SupermercadosPage({
   searchParams,
@@ -24,6 +25,7 @@ export default async function SupermercadosPage({
 
   const moves = await getWeeklyPriceMoves(supabase);
   const indexBySupermarket = averageChangeBySupermarket(moves);
+  const pricesBySupermarket = averagePricesBySupermarket(moves);
 
   const { data: cityRows } = await supabase
     .from("supermarkets")
@@ -43,15 +45,15 @@ export default async function SupermercadosPage({
     <div className="mx-auto w-full max-w-6xl px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-neutral-900">Supermercados</h1>
-          <p className="mt-1 text-sm text-neutral-500">
+          <h1 className="font-display text-2xl font-bold text-foreground">Supermercados</h1>
+          <p className="mt-1 text-sm text-muted">
             {ciudad ? `Mostrando resultados en ${ciudad}` : "Todas las ciudades"}
           </p>
         </div>
         <div className="flex gap-2">
           <Link
             href="/supermercados/importar"
-            className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+            className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted hover:bg-surface-2"
           >
             Importar desde Google Maps
           </Link>
@@ -68,7 +70,7 @@ export default async function SupermercadosPage({
         <select
           name="ciudad"
           defaultValue={ciudad ?? ""}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-line px-3 py-2 text-sm"
         >
           <option value="">Todas las ciudades</option>
           {cities.map((c) => (
@@ -79,7 +81,7 @@ export default async function SupermercadosPage({
         </select>
         <button
           type="submit"
-          className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100"
+          className="rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2"
         >
           Filtrar
         </button>
@@ -89,28 +91,47 @@ export default async function SupermercadosPage({
         <MapView markers={markers} />
       </div>
 
-      <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {(supermarkets ?? []).map((s) => {
           const rating = ratingsById.get(s.id);
+          const change = indexBySupermarket.get(s.id);
+          const prices = pricesBySupermarket.get(s.id);
           return (
             <li key={s.id}>
               <Link
                 href={`/supermercados/${s.id}`}
-                className="block rounded-xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:border-accent-300 hover:shadow-md"
+                className="block rounded-xl border border-line bg-surface p-4 shadow-sm transition hover:border-accent-300"
               >
-                <p className="font-semibold text-neutral-900">{s.name}</p>
-                {s.chain && <p className="text-xs uppercase tracking-wide text-neutral-400">{s.chain}</p>}
-                <p className="mt-1 text-sm text-neutral-500">
-                  {s.address}, {s.city}
-                </p>
-                <div className="mt-2 flex items-center justify-between gap-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    {s.chain && (
+                      <p className="text-[11px] font-bold uppercase tracking-wide text-accent-600">
+                        {s.chain}
+                      </p>
+                    )}
+                    <p className="font-semibold text-foreground">{s.name}</p>
+                    <p className="mt-0.5 text-xs text-muted">
+                      {s.address}, {s.city}
+                    </p>
+                  </div>
+                  {change !== undefined && (
+                    <div className="shrink-0 text-right">
+                      <p className="num text-base font-bold text-foreground">
+                        {change >= 0 ? "+" : ""}
+                        {change.toFixed(1)}%
+                      </p>
+                      <ChangeBadge pct={change} />
+                    </div>
+                  )}
+                </div>
+                <div className="mt-3 flex items-center justify-between border-t border-line pt-2.5">
                   <div className="flex items-center gap-2">
                     <RatingStars score={rating?.avg_score ?? 0} />
-                    <span className="text-xs text-neutral-400">
+                    <span className="text-xs text-muted">
                       {rating ? `${rating.avg_score} (${rating.ratings_count})` : "Sin valoraciones"}
                     </span>
                   </div>
-                  {indexBySupermarket.has(s.id) && <ChangeBadge pct={indexBySupermarket.get(s.id)} />}
+                  {prices && <Sparkline previous={prices.previous} latest={prices.latest} />}
                 </div>
               </Link>
             </li>
@@ -119,7 +140,7 @@ export default async function SupermercadosPage({
       </ul>
 
       {(supermarkets ?? []).length === 0 && (
-        <p className="mt-8 text-center text-sm text-neutral-400">
+        <p className="mt-8 text-center text-sm text-muted">
           No hay supermercados{ciudad ? ` en ${ciudad}` : ""} todavía. ¡Sé el primero en añadir uno!
         </p>
       )}

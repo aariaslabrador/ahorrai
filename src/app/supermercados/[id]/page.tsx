@@ -53,30 +53,30 @@ export default async function SupermercadoDetailPage({
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8">
-      <Link href="/supermercados" className="text-sm text-neutral-500 hover:text-accent-700">
+      <Link href="/supermercados" className="text-sm text-muted hover:text-accent-700">
         ← Volver a supermercados
       </Link>
 
       <div className="mt-2 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-neutral-900">{supermarket.name}</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground">{supermarket.name}</h1>
           {supermarket.chain && (
-            <p className="text-xs uppercase tracking-wide text-neutral-400">{supermarket.chain}</p>
+            <p className="text-xs uppercase tracking-wide text-muted">{supermarket.chain}</p>
           )}
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-sm text-muted">
             {supermarket.address}, {supermarket.city}
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2">
               <RatingStars score={ratingSummary?.avg_score ?? 0} size="md" />
-              <span className="text-sm text-neutral-500">
+              <span className="text-sm text-muted">
                 {ratingSummary
                   ? `${ratingSummary.avg_score} de 5 (${ratingSummary.ratings_count} valoraciones)`
                   : "Sin valoraciones todavía"}
               </span>
             </div>
             {storeIndex !== null && (
-              <div className="flex items-center gap-1 text-xs text-neutral-500">
+              <div className="flex items-center gap-1 text-xs text-muted">
                 <span>Índice semanal:</span>
                 <ChangeBadge pct={storeIndex} />
               </div>
@@ -104,9 +104,9 @@ export default async function SupermercadoDetailPage({
       </div>
 
       <section className="mt-8">
-        <h2 className="text-lg font-bold text-neutral-900">Precios reportados recientemente</h2>
+        <h2 className="text-lg font-bold text-foreground">Precios reportados recientemente</h2>
         {prices && prices.length > 0 ? (
-          <ul className="mt-3 divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
+          <ul className="mt-3 divide-y divide-line rounded-xl border border-line bg-surface">
             {prices.map((p) => (
               <li key={p.id} className="flex items-center justify-between gap-4 px-4 py-3">
                 <div>
@@ -114,10 +114,10 @@ export default async function SupermercadoDetailPage({
                     <span className="font-mono text-[11px] font-bold text-accent-700">
                       {productSymbol(p.product_name)}
                     </span>
-                    <p className="font-medium text-neutral-800">{p.product_name}</p>
+                    <p className="font-medium text-foreground">{p.product_name}</p>
                     <PriceSourceBadge source={p.source} />
                   </div>
-                  {p.product_brand && <p className="text-xs text-neutral-400">{p.product_brand}</p>}
+                  {p.product_brand && <p className="text-xs text-muted">{p.product_brand}</p>}
                 </div>
                 <div className="flex items-center gap-3">
                   <ChangeBadge pct={changeByPair.get(`${p.product_id}::${p.supermarket_id}`)} />
@@ -127,7 +127,7 @@ export default async function SupermercadoDetailPage({
                       href={p.image_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-neutral-400 underline"
+                      className="text-xs text-muted underline"
                     >
                       ver foto
                     </a>
@@ -138,25 +138,25 @@ export default async function SupermercadoDetailPage({
             ))}
           </ul>
         ) : (
-          <p className="mt-3 text-sm text-neutral-400">
+          <p className="mt-3 text-sm text-muted">
             Todavía no hay precios reportados en este supermercado.
           </p>
         )}
       </section>
 
       <section className="mt-8">
-        <h2 className="text-lg font-bold text-neutral-900">Valoraciones</h2>
+        <h2 className="text-lg font-bold text-foreground">Valoraciones</h2>
         {ratings && ratings.length > 0 ? (
           <ul className="mt-3 flex flex-col gap-3">
             {ratings.map((r) => (
-              <li key={r.id} className="rounded-xl border border-neutral-200 bg-white p-4">
+              <li key={r.id} className="rounded-xl border border-line bg-surface p-4">
                 <div className="flex items-center justify-between">
                   <RatingStars score={r.score} />
-                  <span className="text-xs text-neutral-400">
+                  <span className="text-xs text-muted">
                     {new Date(r.created_at).toLocaleDateString("es-ES")}
                   </span>
                 </div>
-                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-neutral-500">
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted">
                   <span>Limpieza: {r.cleanliness}/5</span>
                   <span>Atención: {r.service}/5</span>
                   <span>Organización: {r.organization}/5</span>
@@ -166,12 +166,12 @@ export default async function SupermercadoDetailPage({
                   )}
                   {r.has_butcher !== null && <span>🥩 Carnicería: {r.has_butcher ? "sí" : "no"}</span>}
                 </div>
-                {r.comment && <p className="mt-2 text-sm text-neutral-700">{r.comment}</p>}
+                {r.comment && <p className="mt-2 text-sm text-muted">{r.comment}</p>}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="mt-3 text-sm text-neutral-400">Sé el primero en valorar este supermercado.</p>
+          <p className="mt-3 text-sm text-muted">Sé el primero en valorar este supermercado.</p>
         )}
       </section>
     </div>
