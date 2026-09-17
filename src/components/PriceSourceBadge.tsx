@@ -8,6 +8,13 @@ export default function PriceSourceBadge({ source }: { source: PriceSource }) {
       </span>
     );
   }
+  if (source === "flyer") {
+    return (
+      <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700">
+        Folleto semanal
+      </span>
+    );
+  }
   return (
     <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700">
       Reportado por la comunidad
