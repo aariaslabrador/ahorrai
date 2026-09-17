@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import MapView from "@/components/MapView";
 import RatingStars from "@/components/RatingStars";
+import RatingBreakdown from "@/components/RatingBreakdown";
 import AddToBasketButton from "@/components/AddToBasketButton";
 import PriceSourceBadge from "@/components/PriceSourceBadge";
 import ChangeBadge from "@/components/ChangeBadge";
@@ -91,11 +92,14 @@ export default async function SupermercadoDetailPage({
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <MapView
-          markers={[{ id: supermarket.id, lat: supermarket.lat, lng: supermarket.lng, label: supermarket.name }]}
-          center={[supermarket.lat, supermarket.lng]}
-          zoom={16}
-        />
+        <div className="flex flex-col gap-6">
+          <MapView
+            markers={[{ id: supermarket.id, lat: supermarket.lat, lng: supermarket.lng, label: supermarket.name }]}
+            center={[supermarket.lat, supermarket.lng]}
+            zoom={16}
+          />
+          <RatingBreakdown summary={ratingSummary} />
+        </div>
         <RatingForm supermarketId={supermarket.id} />
       </div>
 
@@ -151,6 +155,16 @@ export default async function SupermercadoDetailPage({
                   <span className="text-xs text-neutral-400">
                     {new Date(r.created_at).toLocaleDateString("es-ES")}
                   </span>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-neutral-500">
+                  <span>Limpieza: {r.cleanliness}/5</span>
+                  <span>Atención: {r.service}/5</span>
+                  <span>Organización: {r.organization}/5</span>
+                  <span>Precio: {r.price}/5</span>
+                  {r.has_fish_counter !== null && (
+                    <span>🐟 Pescadería: {r.has_fish_counter ? "sí" : "no"}</span>
+                  )}
+                  {r.has_butcher !== null && <span>🥩 Carnicería: {r.has_butcher ? "sí" : "no"}</span>}
                 </div>
                 {r.comment && <p className="mt-2 text-sm text-neutral-700">{r.comment}</p>}
               </li>
