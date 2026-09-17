@@ -1,4 +1,4 @@
-# ValoraMercados
+# ahorrAI
 
 Aplicación web para localizar supermercados de tu ciudad, valorarlos y
 consultar/reportar precios actualizados por la comunidad a partir de fotos
