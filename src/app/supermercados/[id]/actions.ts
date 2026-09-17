@@ -19,18 +19,38 @@ export async function rateSupermarket(
   }
 
   const supermarketId = String(formData.get("supermarket_id") ?? "");
-  const score = Number(formData.get("score"));
+  const cleanliness = Number(formData.get("cleanliness"));
+  const service = Number(formData.get("service"));
+  const organization = Number(formData.get("organization"));
+  const price = Number(formData.get("price"));
+  const fishCounterRaw = String(formData.get("has_fish_counter") ?? "");
+  const butcherRaw = String(formData.get("has_butcher") ?? "");
   const comment = String(formData.get("comment") ?? "").trim();
 
-  if (!supermarketId || score < 1 || score > 5) {
-    return { error: "Selecciona una puntuación entre 1 y 5." };
+  const criteria = [cleanliness, service, organization, price];
+  if (!supermarketId || criteria.some((c) => !Number.isInteger(c) || c < 1 || c > 5)) {
+    return { error: "Puntúa los 4 criterios (limpieza, atención, organización y precio) entre 1 y 5." };
   }
+  if (fishCounterRaw !== "true" && fishCounterRaw !== "false") {
+    return { error: "Indica si tiene pescadería." };
+  }
+  if (butcherRaw !== "true" && butcherRaw !== "false") {
+    return { error: "Indica si tiene carnicería." };
+  }
+
+  const score = Math.round(criteria.reduce((sum, c) => sum + c, 0) / criteria.length);
 
   const { error } = await supabase.from("ratings").upsert(
     {
       supermarket_id: supermarketId,
       user_id: user.id,
       score,
+      cleanliness,
+      service,
+      organization,
+      price,
+      has_fish_counter: fishCounterRaw === "true",
+      has_butcher: butcherRaw === "true",
       comment: comment || null,
     },
     { onConflict: "supermarket_id,user_id" }

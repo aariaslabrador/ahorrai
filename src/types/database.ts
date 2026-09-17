@@ -22,6 +22,12 @@ export type Rating = {
   supermarket_id: string;
   user_id: string;
   score: number;
+  cleanliness: number;
+  service: number;
+  organization: number;
+  price: number;
+  has_fish_counter: boolean | null;
+  has_butcher: boolean | null;
   comment: string | null;
   created_at: string;
 };
@@ -69,6 +75,12 @@ export type SupermarketRating = {
   supermarket_id: string;
   avg_score: number;
   ratings_count: number;
+  avg_cleanliness: number;
+  avg_service: number;
+  avg_organization: number;
+  avg_price: number;
+  fish_counter_pct: number | null;
+  butcher_pct: number | null;
 };
 
 export type Basket = {

@@ -8,6 +8,15 @@ export default async function Navbar() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  let cartCount = 0;
+  if (user) {
+    const { data: basket } = await supabase.from("baskets").select("id").eq("user_id", user.id).maybeSingle();
+    if (basket) {
+      const { data: items } = await supabase.from("basket_items").select("quantity").eq("basket_id", basket.id);
+      cartCount = (items ?? []).reduce((sum, i) => sum + i.quantity, 0);
+    }
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
@@ -23,18 +32,27 @@ export default async function Navbar() {
             Cotizaciones
           </Link>
           {user && (
-            <>
-              <Link href="/precios/nuevo" className="hover:text-emerald-700">
-                Reportar precio
-              </Link>
-              <Link href="/cesta" className="hover:text-emerald-700">
-                Mi cartera
-              </Link>
-            </>
+            <Link href="/precios/nuevo" className="hover:text-emerald-700">
+              Reportar precio
+            </Link>
           )}
         </div>
 
         <div className="flex items-center gap-3">
+          {user && (
+            <Link
+              href="/cesta"
+              aria-label="Mi cartera"
+              className="relative flex h-9 w-9 items-center justify-center rounded-lg text-lg hover:bg-neutral-100"
+            >
+              🛒
+              {cartCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-emerald-600 px-1 text-[10px] font-bold text-white">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          )}
           {user ? (
             <form action={signOut} className="flex items-center gap-3">
               <span className="hidden text-sm text-neutral-500 sm:inline">{user.email}</span>
