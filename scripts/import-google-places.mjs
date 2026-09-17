@@ -9,8 +9,10 @@
  *
  * Requiere:
  *   - Un proyecto de Google Cloud con facturación activada y la
- *     "Places API" habilitada (console.cloud.google.com).
- *   - Una API key (restríngela a "Places API" en las credenciales).
+ *     "Places API (New)" habilitada (console.cloud.google.com). Ojo: es
+ *     distinta de la "Places API" clásica/legacy — esa ya no se activa
+ *     en proyectos nuevos.
+ *   - Una API key (restríngela a "Places API (New)" en las credenciales).
  *
  * Uso:
  *   node scripts/import-google-places.mjs --city "Madrid" [opciones]
@@ -39,8 +41,11 @@
 
 import { createClient } from "@supabase/supabase-js";
 
-const TEXT_SEARCH_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json";
-const PAGE_TOKEN_DELAY_MS = 2000; // Google exige un pequeño margen antes de que el next_page_token esté activo.
+// Google retiró la Places API "clásica" para proyectos nuevos: esto usa
+// Places API (New), que habla JSON por POST en vez de query params por GET.
+const TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
+const FIELD_MASK = "places.displayName,places.formattedAddress,places.location,nextPageToken";
+const PAGE_TOKEN_DELAY_MS = 2000; // Igual que la API clásica, conviene esperar antes de pedir la siguiente página.
 
 function parseArgs(argv) {
   const args = { limit: 60, dryRun: false };
@@ -59,30 +64,37 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchPage(url) {
-  const res = await fetch(url);
+async function fetchPage(apiKey, textQuery, pageToken) {
+  const res = await fetch(TEXT_SEARCH_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": FIELD_MASK,
+    },
+    body: JSON.stringify({
+      textQuery,
+      languageCode: "es",
+      ...(pageToken ? { pageToken } : {}),
+    }),
+  });
   const body = await res.json();
-  if (body.status !== "OK" && body.status !== "ZERO_RESULTS") {
-    throw new Error(`Google Places respondió ${body.status}: ${body.error_message ?? "sin detalle"}`);
+  if (!res.ok) {
+    throw new Error(`Google Places (New) respondió: ${body?.error?.message ?? `HTTP ${res.status}`}`);
   }
-  return body;
+  return body; // { places: [...], nextPageToken? }
 }
 
 async function searchSupermarkets(apiKey, query, limit) {
   const results = [];
-  let url = `${TEXT_SEARCH_URL}?query=${encodeURIComponent(query)}&key=${apiKey}`;
+  let pageToken;
 
-  while (url && results.length < limit) {
-    const body = await fetchPage(url);
-    results.push(...body.results);
-
-    if (body.next_page_token && results.length < limit) {
-      await sleep(PAGE_TOKEN_DELAY_MS);
-      url = `${TEXT_SEARCH_URL}?pagetoken=${body.next_page_token}&key=${apiKey}`;
-    } else {
-      url = null;
-    }
-  }
+  do {
+    const body = await fetchPage(apiKey, query, pageToken);
+    results.push(...(body.places ?? []));
+    pageToken = results.length < limit ? body.nextPageToken : undefined;
+    if (pageToken) await sleep(PAGE_TOKEN_DELAY_MS);
+  } while (pageToken && results.length < limit);
 
   return results.slice(0, limit);
 }
@@ -120,7 +132,7 @@ async function main() {
   console.log(`${places.length} resultados encontrados.`);
 
   if (args.dryRun) {
-    places.forEach((p) => console.log(`  - ${p.name} — ${p.formatted_address}`));
+    places.forEach((p) => console.log(`  - ${p.displayName?.text} — ${p.formattedAddress}`));
     return;
   }
 
@@ -129,10 +141,10 @@ async function main() {
   const errors = [];
 
   for (const p of places) {
-    const name = p.name?.trim();
-    const address = p.formatted_address?.trim();
-    const lat = p.geometry?.location?.lat;
-    const lng = p.geometry?.location?.lng;
+    const name = p.displayName?.text?.trim();
+    const address = p.formattedAddress?.trim();
+    const lat = p.location?.latitude;
+    const lng = p.location?.longitude;
 
     if (!name || !address || typeof lat !== "number" || typeof lng !== "number") {
       errors.push(`Resultado incompleto, se omite: ${JSON.stringify(p).slice(0, 120)}`);
