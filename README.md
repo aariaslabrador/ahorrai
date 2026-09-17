@@ -52,7 +52,15 @@ de etiquetas (con lectura automática por OCR).
    `price_reports`, `baskets`, `basket_items`), las vistas (`latest_prices`,
    `supermarket_ratings`), las políticas de RLS y el bucket de Storage
    `price-photos` (público en lectura).
-3. En **Project Settings → API** copia la `Project URL` y la `anon public key`.
+3. (Opcional, pero recomendado para ver la app "con vida" desde el primer
+   momento) Ejecuta también [`supabase/seed_demo.sql`](./supabase/seed_demo.sql):
+   crea 7 supermercados de ejemplo (Madrid, Barcelona, Valencia) con varios
+   días de historial de precios, así que el índice, las cotizaciones y los
+   "mayores movimientos de la semana" del Inicio muestran datos reales desde
+   ya, en vez de aparecer vacíos hasta que usuarios de verdad reporten
+   precios repetidos. No hace falta para que la app funcione — sáltatelo si
+   prefieres arrancar con la base de datos limpia.
+4. En **Project Settings → API** copia la `Project URL` y la `anon public key`.
 
 ### 2. Variables de entorno
 
@@ -100,10 +108,12 @@ src/
   types/database.ts               Tipos TypeScript del esquema
   scripts/
     import-mercadona.mjs          Importador opcional de precios (ver más abajo)
-supabase/migrations/
-  0001_init.sql                   Esquema base (supermercados, valoraciones, precios)
-  0002_basket.sql                 Cesta de la compra
-  0003_price_source.sql           Distingue precios 'community' vs 'scraper'
+supabase/
+  migrations/
+    0001_init.sql                 Esquema base (supermercados, valoraciones, precios)
+    0002_basket.sql               Cesta de la compra
+    0003_price_source.sql         Distingue precios 'community' vs 'scraper'
+  seed_demo.sql                   Datos de ejemplo opcionales para ver la app con datos
 ```
 
 ## Notas de diseño

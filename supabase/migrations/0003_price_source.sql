@@ -9,8 +9,15 @@ alter table public.price_reports
 alter table public.price_reports alter column image_url drop not null;
 alter table public.price_reports alter column user_id drop not null;
 
--- Recreamos la vista para exponer el nuevo campo.
-create or replace view public.latest_prices as
+-- Recreamos la vista para exponer el nuevo campo. No se puede usar
+-- "create or replace" aquí: Postgres solo permite añadir columnas al FINAL
+-- de una vista existente al reemplazarla, y `source` va en medio de la
+-- lista original — con "or replace" fallaría (y al fallar dentro de la
+-- misma transacción que el SQL Editor ejecuta, deshace también el
+-- `alter table add column` anterior).
+drop view if exists public.latest_prices;
+
+create view public.latest_prices as
 select distinct on (pr.product_id, pr.supermarket_id)
   pr.id,
   pr.product_id,
