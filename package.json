@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "import:mercadona": "node scripts/import-mercadona.mjs"
+    "import:mercadona": "node scripts/import-mercadona.mjs",
+    "import:supermercados": "node scripts/import-google-places.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

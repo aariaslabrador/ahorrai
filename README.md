@@ -31,6 +31,10 @@ de etiquetas (con lectura automática por OCR).
   puede poblar precios "oficiales" desde la web de un supermercado como base,
   que luego los usuarios sobrescriben con sus propios reportes — ver
   [Importar precios oficiales](#importar-precios-oficiales-opcional-y-bajo-tu-responsabilidad).
+- **Importar supermercados desde Google Maps (opcional)**: otro script
+  (`scripts/import-google-places.mjs`) da de alta de golpe los supermercados
+  de una ciudad usando la API oficial de Google Places — ver
+  [Importar supermercados desde Google Maps](#importar-supermercados-desde-google-maps-opcional).
 
 ## Stack
 
@@ -108,6 +112,7 @@ src/
   types/database.ts               Tipos TypeScript del esquema
   scripts/
     import-mercadona.mjs          Importador opcional de precios (ver más abajo)
+    import-google-places.mjs      Importador opcional de supermercados vía Google Places (ver más abajo)
 supabase/
   migrations/
     0001_init.sql                 Esquema base (supermercados, valoraciones, precios)
@@ -185,6 +190,44 @@ Supabase, en **Project Settings → API**) porque se salta la seguridad por
 fila (RLS) para poder insertar precios sin que haya un usuario detrás.
 **Nunca** la pongas con prefijo `NEXT_PUBLIC_` ni la uses en código que se
 ejecute en el navegador — se ejecuta solo en tu máquina, a mano.
+
+## Importar supermercados desde Google Maps (opcional)
+
+[`scripts/import-google-places.mjs`](./scripts/import-google-places.mjs) da de
+alta de golpe los supermercados de una ciudad, usando la **API oficial de
+Google Places** con tu propia clave. A diferencia del importador de
+Mercadona, esto no tiene ningún problema de términos de uso: es exactamente
+para lo que Google ofrece esa API.
+
+**Necesitas:**
+
+1. Un proyecto en [Google Cloud Console](https://console.cloud.google.com)
+   con facturación activada (dan crédito gratuito mensual; consulta el
+   pricing actual de Google Maps Platform).
+2. Habilitar la **Places API** en ese proyecto.
+3. Crear una **API key** en *Credenciales*, y restringirla a "Places API"
+   para que no se pueda usar para otra cosa si se filtra.
+
+**Uso:**
+
+```bash
+# 1) Prueba sin escribir nada en la base de datos:
+node scripts/import-google-places.mjs --city "Madrid" --dry-run
+
+# 2) Si la lista tiene sentido, impórtala de verdad (requiere
+#    GOOGLE_MAPS_API_KEY y SUPABASE_SERVICE_ROLE_KEY en tu .env.local):
+npm run import:supermercados -- --city "Madrid" --limit 60
+```
+
+Por defecto busca "supermercado en <ciudad>"; puedes afinar la búsqueda con
+`--query` (ej. `--query "Mercadona"` para solo esa cadena). Evita duplicados
+comprobando nombre + dirección antes de insertar, así que puedes ejecutarlo
+varias veces o para varias ciudades sin miedo a repetir supermercados.
+
+Google Maps Platform tiene sus propias condiciones sobre cuánto tiempo y
+cómo se pueden guardar los datos de Places — este script solo guarda
+nombre, dirección y coordenadas para tu catálogo, pero si vas a usar esto
+en un producto real con más usuarios, revisa las condiciones vigentes.
 
 ## Próximos pasos sugeridos
 
