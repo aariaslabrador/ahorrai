@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ValoraMercados",
+  title: "ahorrAI",
   description: "Las mejores ofertas y valoraciones de supermercados de tu ciudad.",
 };
 
